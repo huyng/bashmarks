@@ -1,4 +1,5 @@
 all:
+	@echo "Pleas run 'make install'"
 
 install:
 	mkdir -p ~/.local/bin/
