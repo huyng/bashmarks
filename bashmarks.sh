@@ -29,6 +29,9 @@
 # g b[TAB] - tab completion is available
 # l - list all bookmarks
 
+# enable custom programatic tab completion
+shopt -s progcomp       
+
 # save current directory to bookmarks
 touch ~/.sdirs
 function s {
