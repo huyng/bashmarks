@@ -21,6 +21,14 @@
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
 # POSSIBILITY OF SUCH DAMAGE.
 
+
+# enable custom tab completion
+# USAGE: 
+# s bookmarkname - saves the curr dir as bookmarkname
+# g bookmarkname - jumps to the that bookmark
+# g b[TAB] - tab completion is available
+# l - list all bookmarks
+
 # save current directory to bookmarks
 touch ~/.sdirs
 function s {
