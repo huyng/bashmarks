@@ -2,14 +2,11 @@
 
 ## Install
 
-1. Download [bashmarks.tar.gz](http://www.huyng.com/wp-content/uploads/bashmarks/bashmarks.tar.gz)
-2. Extract the tar archive
-3. Source **bashmarks.sh** from within your **~.bash\_profile** or **~/.bashrc** file
+1. git clone git://github.com/huyng/bashmarks.git
+2. make install
+3. source **~/.local/bin/bashmarks.sh** from within your **~.bash\_profile** or **~/.bashrc** file
 
-
-
-
-
+## Shell Commands
 
     s <bookmark_name> - Saves the current directory as "bookmark_name"
     g <bookmark_name> - Goes (cd) to the directory associated with "bookmark_name"
