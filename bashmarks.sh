@@ -30,7 +30,6 @@
 # l - list all bookmarks
 
 # enable custom programatic tab completion
-shopt -s progcomp       
 
 # save current directory to bookmarks
 touch ~/.sdirs
@@ -66,5 +65,15 @@ function _gcomp {
     return 0
 }
 
+# ZSH _gcomp function
+function _gcompzsh {
+    reply=($(_l))
+}
+
 # bind completion command for g to _gcomp
-complete -F _gcomp g
+if [ $ZSH_VERSION ]; then
+    compctl -K _gcompzsh g
+else
+    shopt -s progcomp       
+    complete -F _gcomp g
+fi
