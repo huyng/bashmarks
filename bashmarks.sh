@@ -96,18 +96,18 @@ function _comp {
     return 0
 }
 
-# ZSH _gcomp function
+# ZSH completion command
 function _compzsh {
     reply=($(_l))
 }
 
 # bind completion command for g,p,d to _comp
 if [ $ZSH_VERSION ]; then
-    compctl -K _gcompzsh g
-    compctl -K _gcompzsh p
-    compctl -K _gcompzsh d
+    compctl -K _compzsh g
+    compctl -K _compzsh p
+    compctl -K _compzsh d
 else
-    shopt -s progcomp       
+    shopt -s progcomp
     complete -F _comp g
     complete -F _comp p
     complete -F _comp d
