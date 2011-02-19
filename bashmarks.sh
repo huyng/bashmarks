@@ -22,7 +22,6 @@
 # POSSIBILITY OF SUCH DAMAGE.
 
 
-# enable custom tab completion
 # USAGE: 
 # s bookmarkname - saves the curr dir as bookmarkname
 # g bookmarkname - jumps to the that bookmark
@@ -30,30 +29,34 @@
 # p bookmarkname - prints the bookmark
 # p b[TAB] - tab completion is available
 # d bookmarkname - deletes the bookmark
-# d[TAB] - tab completion is available
+# d [TAB] - tab completion is available
 # l - list all bookmarks
 
-# save current directory to bookmarks
-touch ~/.sdirs
+# setup file to store bookmarks
+if [ ! -n "$SDIRS" ]; then
+    SDIRS=~/.sdirs
+fi
+touch $SDIRS
 
+# save current directory to bookmarks
 function s {
     _bookmark_name_valid "$@"
     if [ -z "$exit_message" ]; then
-	cat ~/.sdirs | grep -v "export DIR_$1=" > ~/.sdirs1
-	mv ~/.sdirs1 ~/.sdirs
-	echo "export DIR_$1='$PWD'" >> ~/.sdirs
+	cat $SDIRS | grep -v "export DIR_$1=" > $SDIRS.tmp
+	mv $SDIRS.tmp $SDIRS
+	echo "export DIR_$1='$PWD'" >> $SDIRS
     fi
 }
 
 # jump to bookmark
 function g {
-    source ~/.sdirs
+    source $SDIRS
     cd "$(eval $(echo echo $(echo \$DIR_$1)))"
 }
 
 # print bookmark
 function p {
-    source ~/.sdirs
+    source $SDIRS
     echo "$(eval $(echo echo $(echo \$DIR_$1)))"
 }
 
@@ -61,20 +64,20 @@ function p {
 function d {
     _bookmark_name_valid "$@"
     if [ -z "$exit_message" ]; then
-	cat ~/.sdirs | grep -v "export DIR_$1=" > ~/.sdirs1
-	mv ~/.sdirs1 ~/.sdirs
+	cat $SDIRS | grep -v "export DIR_$1=" > $SDIRS.tmp
+	mv $SDIRS.tmp $SDIRS
 	unset "DIR_$1"
     fi
 }
 
 # list bookmarks with dirnam
 function l {
-    source ~/.sdirs
+    source $SDIRS
     env | grep "^DIR_" | cut -c5- | grep "^.*="
 }
 # list bookmarks without dirname
 function _l {
-    source ~/.sdirs
+    source $SDIRS
     env | grep "^DIR_" | cut -c5- | grep "^.*=" | cut -f1 -d "="
 }
 
