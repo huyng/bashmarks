@@ -27,37 +27,69 @@
 # s bookmarkname - saves the curr dir as bookmarkname
 # g bookmarkname - jumps to the that bookmark
 # g b[TAB] - tab completion is available
+# p bookmarkname - prints the bookmark
+# p b[TAB] - tab completion is available
+# d bookmarkname - deletes the bookmark
+# d[TAB] - tab completion is available
 # l - list all bookmarks
-
-# enable custom programatic tab completion
 
 # save current directory to bookmarks
 touch ~/.sdirs
+
 function s {
-   cat ~/.sdirs | grep -v "export DIR_$1=" > ~/.sdirs1
-   mv ~/.sdirs1 ~/.sdirs
-   echo "export DIR_$1='$PWD'" >> ~/.sdirs
+    _bookmark_name_valid "$@"
+    if [ -z "$exit_message" ]; then
+	cat ~/.sdirs | grep -v "export DIR_$1=" > ~/.sdirs1
+	mv ~/.sdirs1 ~/.sdirs
+	echo "export DIR_$1='$PWD'" >> ~/.sdirs
+    fi
 }
 
 # jump to bookmark
 function g {
-   source ~/.sdirs
-   cd "$(eval $(echo echo $(echo \$DIR_$1)))"
+    source ~/.sdirs
+    cd "$(eval $(echo echo $(echo \$DIR_$1)))"
+}
+
+# print bookmark
+function p {
+    source ~/.sdirs
+    echo "$(eval $(echo echo $(echo \$DIR_$1)))"
+}
+
+# delete bookmark
+function d {
+    _bookmark_name_valid "$@"
+    if [ -z "$exit_message" ]; then
+	bookname=$(cat ~/.sdirs | grep -o "DIR_$1")
+	unset "$bookname"
+	cat ~/.sdirs | grep -v "export DIR_$1=" > ~/.sdirs1
+	mv ~/.sdirs1 ~/.sdirs
+    fi
 }
 
 # list bookmarks with dirnam
 function l {
-   source ~/.sdirs
-   env | grep "^DIR_" | cut -c5- | grep "^.*="
+    source ~/.sdirs
+    env | grep "^DIR_" | cut -c5- | grep "^.*="
 }
 # list bookmarks without dirname
 function _l {
-   source ~/.sdirs
-   env | grep "^DIR_" | cut -c5- | grep "^.*=" | cut -f1 -d "="
+    source ~/.sdirs
+    env | grep "^DIR_" | cut -c5- | grep "^.*=" | cut -f1 -d "="
 }
 
-# completion command for g
-function _gcomp {
+# validate bookmark name
+function _bookmark_name_valid {
+    exit_message=""
+    if [ -z $1 ]; then
+	exit_message="bookmark name required"
+	echo $exit_message
+    fi
+}
+
+# completion command
+function _comp {
     local curw
     COMPREPLY=()
     curw=${COMP_WORDS[COMP_CWORD]}
@@ -66,14 +98,18 @@ function _gcomp {
 }
 
 # ZSH _gcomp function
-function _gcompzsh {
+function _compzsh {
     reply=($(_l))
 }
 
-# bind completion command for g to _gcomp
+# bind completion command for g,p,d to _comp
 if [ $ZSH_VERSION ]; then
     compctl -K _gcompzsh g
+    compctl -K _gcompzsh p
+    compctl -K _gcompzsh d
 else
     shopt -s progcomp       
-    complete -F _gcomp g
+    complete -F _comp g
+    complete -F _comp p
+    complete -F _comp d
 fi
