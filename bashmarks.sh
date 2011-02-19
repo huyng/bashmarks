@@ -32,27 +32,31 @@
 # enable custom programatic tab completion
 
 # save current directory to bookmarks
-touch ~/.sdirs
+if [ ! -n "$SDIRS" ]; then
+    SDIRS=~/.sdirs
+fi
+
+touch $SDIRS
 function s {
-   cat ~/.sdirs | grep -v "export DIR_$1=" > ~/.sdirs1
-   mv ~/.sdirs1 ~/.sdirs
-   echo "export DIR_$1='$PWD'" >> ~/.sdirs
+   cat $SDIRS | grep -v "export DIR_$1=" > $SDIRS.tmp
+   mv $SDIRS.tmp $SDIRS
+   echo "export DIR_$1='$PWD'" >> $SDIRS
 }
 
 # jump to bookmark
 function g {
-   source ~/.sdirs
+   source $SDIRS
    cd "$(eval $(echo echo $(echo \$DIR_$1)))"
 }
 
 # list bookmarks with dirnam
 function l {
-   source ~/.sdirs
+   source $SDIRS
    env | grep "^DIR_" | cut -c5- | grep "^.*="
 }
 # list bookmarks without dirname
 function _l {
-   source ~/.sdirs
+   source $SDIRS
    env | grep "^DIR_" | cut -c5- | grep "^.*=" | cut -f1 -d "="
 }
 
