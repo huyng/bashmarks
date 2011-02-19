@@ -61,10 +61,9 @@ function p {
 function d {
     _bookmark_name_valid "$@"
     if [ -z "$exit_message" ]; then
-	bookname=$(cat ~/.sdirs | grep -o "DIR_$1")
-	unset "$bookname"
 	cat ~/.sdirs | grep -v "export DIR_$1=" > ~/.sdirs1
 	mv ~/.sdirs1 ~/.sdirs
+	unset "DIR_$1"
     fi
 }
 
