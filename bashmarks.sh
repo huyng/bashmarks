@@ -36,13 +36,13 @@ touch ~/.sdirs
 function s {
    cat ~/.sdirs | grep -v "export DIR_$1=" > ~/.sdirs1
    mv ~/.sdirs1 ~/.sdirs
-   echo "export DIR_$1=$PWD" >> ~/.sdirs
+   echo "export DIR_$1='$PWD'" >> ~/.sdirs
 }
 
 # jump to bookmark
 function g {
    source ~/.sdirs
-   cd $(eval $(echo echo $(echo \$DIR_$1)))
+   cd "$(eval $(echo echo $(echo \$DIR_$1)))"
 }
 
 # list bookmarks with dirnam
