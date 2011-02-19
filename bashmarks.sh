@@ -38,9 +38,14 @@ fi
 
 touch $SDIRS
 function s {
+   d $1
+   echo "export DIR_$1='$PWD'" >> $SDIRS
+}
+
+function d {
    cat $SDIRS | grep -v "export DIR_$1=" > $SDIRS.tmp
    mv $SDIRS.tmp $SDIRS
-   echo "export DIR_$1='$PWD'" >> $SDIRS
+   unset DIR_$1
 }
 
 # jump to bookmark
