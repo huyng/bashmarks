@@ -37,13 +37,19 @@ touch ~/.sdirs
 function s {
    cat ~/.sdirs | grep -v "export DIR_$1=" > ~/.sdirs1
    mv ~/.sdirs1 ~/.sdirs
-   echo "export DIR_$1=$PWD" >> ~/.sdirs
+   # escape path
+   escaped_path=${PWD/ /\\ }
+   echo "export DIR_$1=$escaped_path" >> ~/.sdirs
 }
 
 # jump to bookmark
 function g {
    source ~/.sdirs
-   cd $(eval $(echo echo $(echo \$DIR_$1)))
+   path=$(eval $(echo echo $(echo \$DIR_$1)))
+   # replace whitespaces with "\ " for escaping
+   escaped_path=${path/ /\\ }
+   cd_eval="cd $escaped_path"
+   eval $cd_eval
 }
 
 # list bookmarks with dirnam
