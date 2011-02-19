@@ -26,22 +26,26 @@
 # USAGE: 
 # s bookmarkname - saves the curr dir as bookmarkname
 # g bookmarkname - jumps to the that bookmark
+# d bookmarkname - delete the specified bookmark
 # g b[TAB] - tab completion is available
 # l - list all bookmarks
 
 # enable custom programatic tab completion
 
-# save current directory to bookmarks
+
 if [ ! -n "$SDIRS" ]; then
     SDIRS=~/.sdirs
 fi
 
 touch $SDIRS
+
+# save current directory to bookmarks
 function s {
    d $1
    echo "export DIR_$1='$PWD'" >> $SDIRS
 }
 
+#delete the specified bookmark
 function d {
    cat $SDIRS | grep -v "export DIR_$1=" > $SDIRS.tmp
    mv $SDIRS.tmp $SDIRS
