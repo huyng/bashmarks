@@ -85,8 +85,11 @@ function _l {
 function _bookmark_name_valid {
     exit_message=""
     if [ -z $1 ]; then
-	exit_message="bookmark name required"
-	echo $exit_message
+		exit_message="bookmark name required"
+		echo $exit_message
+	elif [ "$1" != "$(echo $1 | sed 's/[^A-Za-z0-9_]//g')" ]; then
+		exit_message="bookmark name not valid"
+		echo $exit_message
     fi
 }
 
