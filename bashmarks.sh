@@ -40,6 +40,7 @@ touch $SDIRS
 
 # save current directory to bookmarks
 function s {
+	check_help $1
     _bookmark_name_valid "$@"
     if [ -z "$exit_message" ]; then
 	cat $SDIRS | grep -v "export DIR_$1=" > $SDIRS.tmp
@@ -50,12 +51,14 @@ function s {
 
 # jump to bookmark
 function g {
+	check_help $1
     source $SDIRS
     cd "$(eval $(echo echo $(echo \$DIR_$1)))"
 }
 
 # print bookmark
 function p {
+	check_help $1
     source $SDIRS
     echo "$(eval $(echo echo $(echo \$DIR_$1)))"
 }
@@ -71,22 +74,23 @@ function d {
 }
 
 # print out help for the forgetful
-function help {
-    echo 's <bookmark_name> - Saves the current directory as "bookmark_name"'
-    echo 'g <bookmark_name> - Goes (cd) to the directory associated with "bookmark_name"'
-    echo 'p <bookmark_name> - Prints the directory associated with "bookmark_name"'
-    echo 'd <bookmark_name> - Deletes the bookmark'
-    echo 'l                 - Lists all available bookmarks'
+function check_help {
+	if [ "$1" = "-h" ] || [ "$1" = "-help" ] || [ "$1" = "--help" ] ; then
+		echo ''
+	    echo 's <bookmark_name> - Saves the current directory as "bookmark_name"'
+	    echo 'g <bookmark_name> - Goes (cd) to the directory associated with "bookmark_name"'
+	    echo 'p <bookmark_name> - Prints the directory associated with "bookmark_name"'
+	    echo 'd <bookmark_name> - Deletes the bookmark'
+	    echo 'l                 - Lists all available bookmarks'
+		kill -SIGINT $$
+	fi
 }
 
 # list bookmarks with dirnam
 function l {
-    if [ "$1" = "-h" ] || [ "$1" = "-help" ] || [ "$1" = "--help" ] ; then
-        help
-    else
-        source $SDIRS
-        env | grep "^DIR_" | cut -c5- | grep "^.*="
-    fi
+	check_help $1
+	source $SDIRS
+	env | grep "^DIR_" | cut -c5- | grep "^.*="
 }
 # list bookmarks without dirname
 function _l {
@@ -101,7 +105,7 @@ function _bookmark_name_valid {
 		exit_message="bookmark name required"
 		echo $exit_message
 	elif [ "$1" != "$(echo $1 | sed 's/[^A-Za-z0-9_]//g')" ]; then
-		exit_message="bookmark name not valid"
+		exit_message="bookmark name is not valid"
 		echo $exit_message
     fi
 }
