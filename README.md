@@ -16,11 +16,11 @@
     
 ## Example Usage
 
-    cd /var/www/
+    $ cd /var/www/
     s webfolder
-    cd /usr/local/lib/
+    $ cd /usr/local/lib/
     s locallib
-    l
+    $ l
     g web<tab>
     g webfolder
 
