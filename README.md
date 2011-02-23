@@ -21,8 +21,12 @@
     $ cd /usr/local/lib/
     s locallib
     $ l
-    g web<tab>
-    g webfolder
+    webfolder=/var/www
+    locallib=/usr/local/lib
+    $ g web<tab>
+    $ g webfolder
+    $ pwd
+    /var/www
 
 ## Where Bashmarks are stored
     
