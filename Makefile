@@ -1,7 +1,7 @@
 INSTALL_DIR=~/.local/bin
 
 all:
-	@echo "Pleas run 'make install'"
+	@echo "Please run 'make install'"
 
 install:
 	@echo ""
@@ -14,6 +14,7 @@ install:
 	@echo '------'
 	@echo 's <bookmark_name> - Saves the current directory as "bookmark_name"'
 	@echo 'g <bookmark_name> - Goes (cd) to the directory associated with "bookmark_name"'
+	@echo 'n <bookmark_name> - Goes (cd) to the directory associated with "bookmark_name" in a new tab (if your shell app supports it)'
 	@echo 'p <bookmark_name> - Prints the directory associated with "bookmark_name"'
 	@echo 'd <bookmark_name> - Deletes the bookmark'
 	@echo 'l                 - Lists all available bookmarks'

@@ -38,6 +38,9 @@ if [ ! -n "$SDIRS" ]; then
 fi
 touch $SDIRS
 
+# find out whether we can open new tabs in current shell application
+UNAME=`uname`
+
 # save current directory to bookmarks
 function s {
 	check_help $1
@@ -55,6 +58,24 @@ function g {
     source $SDIRS
     cd "$(eval $(echo echo $(echo \$DIR_$1)))"
 }
+
+# jump to bookmark in new tab
+if [ "$UNAME" == "Darwin" ]; then
+    function n {
+        check_help $1
+        source $SDIRS
+        DEST_DIR="$(eval $(echo echo $(echo \$DIR_$1)))"
+        osascript > /dev/null 2>&1 <<EOS
+            tell application "System Events"
+                tell process "Terminal" to keystroke "t" using command down
+            end tell
+            tell application "Terminal"
+                activate
+                do script with command "cd $DEST_DIR;" in window 1
+            end tell
+EOS
+    }
+fi
 
 # print bookmark
 function p {
@@ -80,6 +101,9 @@ function check_help {
 		echo ''
 	    echo 's <bookmark_name> - Saves the current directory as "bookmark_name"'
 	    echo 'g <bookmark_name> - Goes (cd) to the directory associated with "bookmark_name"'
+        if [ "$UNAME" == "Darwin" ]; then
+        echo 'n <bookmark_name> - Goes (cd) to the directory associated with "bookmark_name" in a new tab'
+        fi
 	    echo 'p <bookmark_name> - Prints the directory associated with "bookmark_name"'
 	    echo 'd <bookmark_name> - Deletes the bookmark'
 	    echo 'l                 - Lists all available bookmarks'
@@ -125,14 +149,20 @@ function _compzsh {
     reply=($(_l))
 }
 
-# bind completion command for g,p,d to _comp
+# bind completion command for g,n,p,d to _comp
 if [ $ZSH_VERSION ]; then
     compctl -K _compzsh g
+    if [ "$UNAME" == "Darwin" ]; then
+    compctl -K _compzsh n
+    fi    
     compctl -K _compzsh p
     compctl -K _compzsh d
 else
     shopt -s progcomp
     complete -F _comp g
+    if [ "$UNAME" == "Darwin" ]; then
+    complete -F _comp n
+    fi
     complete -F _comp p
     complete -F _comp d
 fi
