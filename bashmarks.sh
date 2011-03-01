@@ -45,7 +45,7 @@ function s {
     if [ -z "$exit_message" ]; then
         cat $SDIRS | grep -v "export DIR_$1=" > $SDIRS.tmp
         mv $SDIRS.tmp $SDIRS
-        CURDIR=$(echo $PWD| sed "s#^$HOME#\$HOME#g" )
+        CURDIR=$(echo $PWD| sed "s#^$HOME#\$HOME#g")
         echo "export DIR_$1=\"$CURDIR\"" >> $SDIRS
     fi
 }
@@ -92,12 +92,12 @@ function check_help {
 function l {
     check_help $1
     source $SDIRS
-    env | grep "^DIR_" | cut -c5- | grep "^.*=" | sort
+    env | grep "^DIR_" | cut -c5- | sort |grep "^.*=" 
 }
 # list bookmarks without dirname
 function _l {
     source $SDIRS
-    env | grep "^DIR_" | cut -c5- | grep "^.*=" | cut -f1 -d "=" | sort
+    env | grep "^DIR_" | cut -c5- | sort | grep "^.*=" | cut -f1 -d "=" 
 }
 
 # validate bookmark name
