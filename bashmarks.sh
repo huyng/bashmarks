@@ -43,8 +43,7 @@ function s {
     check_help $1
     _bookmark_name_valid "$@"
     if [ -z "$exit_message" ]; then
-        cat $SDIRS | grep -v "export DIR_$1=" > $SDIRS.tmp
-        mv $SDIRS.tmp $SDIRS
+        _purge_line "$SDIRS" "export DIR_$1="
         CURDIR=$(echo $PWD| sed "s#^$HOME#\$HOME#g")
         echo "export DIR_$1=\"$CURDIR\"" >> $SDIRS
     fi
@@ -69,8 +68,7 @@ function d {
     check_help $1
     _bookmark_name_valid "$@"
     if [ -z "$exit_message" ]; then
-        cat $SDIRS | grep -v "export DIR_$1=" > $SDIRS.tmp
-        mv $SDIRS.tmp $SDIRS
+        _purge_line "$SDIRS" "export DIR_$1="
         unset "DIR_$1"
     fi
 }
@@ -129,6 +127,23 @@ function _comp {
 # ZSH completion command
 function _compzsh {
     reply=($(_l))
+}
+
+# safe delete line from sdirs
+function _purge_line {
+    if [ -s "$1" ]; then
+        # safely create a temp file
+        t=$(mktemp -t bashmarks) || exit 1
+        trap "rm -f -- '$t'" EXIT
+
+        # purge line
+        sed "/$2/d" "$1" > "$t"
+        mv "$t" "$1"
+
+        # cleanup temp file
+        rm -f -- "$t"
+        trap - EXIT
+    fi
 }
 
 # bind completion command for g,p,d to _comp
