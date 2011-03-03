@@ -90,9 +90,9 @@ function check_help {
 function l {
     check_help $1
     source $SDIRS
-    
+        
     # if color output is not working for you, comment out the line below '\033[1;32m' == "red"
-    env | sort | awk '(substr($0,0,4)=="DIR_"){split(substr($0,5),parts,"="); printf("\033[1;31m%-20s\033[0m %s\n", parts[1], parts[2]);}'
+    env | sort | awk '/DIR_.+/{split(substr($0,5),parts,"="); printf("\033[1;31m%-20s\033[0m %s\n", parts[1], parts[2]);}'
     
     # uncomment this line if color output is not working with the line above
     # env | grep "^DIR_" | cut -c5- | sort |grep "^.*=" 
@@ -133,7 +133,7 @@ function _compzsh {
 function _purge_line {
     if [ -s "$1" ]; then
         # safely create a temp file
-        t=$(mktemp -t bashmarks) || exit 1
+        t=$(mktemp -t bashmarks.XXXXXX) || exit 1
         trap "rm -f -- '$t'" EXIT
 
         # purge line
