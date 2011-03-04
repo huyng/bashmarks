@@ -40,37 +40,27 @@ touch $SDIRS
 
 # save current directory to bookmarks
 function s {
-    _bashmarks_check_help $1
-    _bashmarks_bookmark_name_valid "$@"
-    if [ -z "$_bashmarks_exit_message" ]; then
-        _bashmarks_purge_line "$SDIRS" "export DIR_$1="
-        CURDIR=$(echo $PWD| sed "s#^$HOME#\$HOME#g")
-        echo "export DIR_$1=\"$CURDIR\"" >> $SDIRS
-    fi
+    _bashmarks_check_help $@ || _bashmarks_save $@
 }
 
 # jump to bookmark
 function g {
-    _bashmarks_check_help $1
-    source $SDIRS
-    cd "$(eval $(echo echo $(echo \$DIR_$1)))"
+    _bashmarks_check_help $@ || _bashmarks_go $@
 }
 
 # print bookmark
 function p {
-    _bashmarks_check_help $1
-    source $SDIRS
-    echo "$(eval $(echo echo $(echo \$DIR_$1)))"
+    _bashmarks_check_help $@ || _bashmarks_print $@
 }
 
 # delete bookmark
 function d {
-    _bashmarks_check_help $1
-    _bashmarks_bookmark_name_valid "$@"
-    if [ -z "$_bashmarks_exit_message" ]; then
-        _bashmarks_purge_line "$SDIRS" "export DIR_$1="
-        unset "DIR_$1"
-    fi
+    _bashmarks_check_help $@ || _bashmarks_delete $@
+}
+
+# list bookmarks with dirname
+function l {
+    _bashmarks_check_help $@ || _bashmarks_list $@
 }
 
 # print out help for the forgetful
@@ -82,13 +72,39 @@ function _bashmarks_check_help {
         echo 'p <bookmark_name> - Prints the directory associated with "bookmark_name"'
         echo 'd <bookmark_name> - Deletes the bookmark'
         echo 'l                 - Lists all available bookmarks'
-        kill -SIGINT $$
+        return 0
+    fi
+    return 1
+}
+
+function _bashmarks_save {
+    _bashmarks_bookmark_name_valid "$@"
+    if [ -z "$_bashmarks_exit_message" ]; then
+        _bashmarks_purge_line "$SDIRS" "export DIR_$1="
+        CURDIR=$(echo $PWD| sed "s#^$HOME#\$HOME#g")
+        echo "export DIR_$1=\"$CURDIR\"" >> $SDIRS
     fi
 }
 
-# list bookmarks with dirnam
-function l {
-    _bashmarks_check_help $1
+function _bashmarks_go {
+    source $SDIRS
+    cd "$(eval $(echo echo $(echo \$DIR_$1)))"
+}
+
+function _bashmarks_print {
+    source $SDIRS
+    echo "$(eval $(echo echo $(echo \$DIR_$1)))"
+}
+
+function _bashmarks_delete {
+    _bashmarks_bookmark_name_valid "$@"
+    if [ -z "$_bashmarks_exit_message" ]; then
+        _bashmarks_purge_line "$SDIRS" "export DIR_$1="
+        unset "DIR_$1"
+    fi
+}
+
+function _bashmarks_list {
     source $SDIRS
         
     # if color output is not working for you, comment out the line below '\033[1;32m' == "red"
@@ -97,8 +113,9 @@ function l {
     # uncomment this line if color output is not working with the line above
     # env | grep "^DIR_" | cut -c5- | sort |grep "^.*=" 
 }
+
 # list bookmarks without dirname
-function _bashmarks_l {
+function _bashmarks_list_without_dirname {
     source $SDIRS
     env | grep "^DIR_" | cut -c5- | sort | grep "^.*=" | cut -f1 -d "=" 
 }
