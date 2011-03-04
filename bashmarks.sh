@@ -133,16 +133,21 @@ function _compzsh {
 function _purge_line {
     if [ -s "$1" ]; then
         # safely create a temp file
-        t=$(mktemp -t bashmarks.XXXXXX) || exit 1
-        trap "rm -f -- '$t'" EXIT
+        t=$(mktemp -t bashmarks.XXXXXX)
 
-        # purge line
-        sed "/$2/d" "$1" > "$t"
-        mv "$t" "$1"
+        if [ $? -eq 0 ]; then
+            trap "rm -f -- '$t'" EXIT
 
-        # cleanup temp file
-        rm -f -- "$t"
-        trap - EXIT
+            # purge line
+            sed "/$2/d" "$1" > "$t"
+            mv "$t" "$1"
+
+            # cleanup temp file
+            rm -f -- "$t"
+            trap - EXIT
+        else
+            echo "Failed to create temporary file." >&2
+        fi
     fi
 }
 
