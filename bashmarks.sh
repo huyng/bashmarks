@@ -51,9 +51,13 @@ function s {
 
 # jump to bookmark
 function g {
-    check_help $1
-    source $SDIRS
-    cd "$(eval $(echo echo $(echo \$DIR_$1)))"
+    if [ -z $1 ]; then
+        bashmarks_list
+    else
+        check_help $1
+        source $SDIRS
+        cd "$(eval $(echo echo $(echo \$DIR_$1)))"
+    fi
 }
 
 # print bookmark
@@ -81,13 +85,13 @@ function check_help {
         echo 'g <bookmark_name> - Goes (cd) to the directory associated with "bookmark_name"'
         echo 'p <bookmark_name> - Prints the directory associated with "bookmark_name"'
         echo 'd <bookmark_name> - Deletes the bookmark'
-        echo 'l                 - Lists all available bookmarks'
+        echo 'g                 - Lists all available bookmarks'
         kill -SIGINT $$
     fi
 }
 
 # list bookmarks with dirnam
-function l {
+function bashmarks_list {
     check_help $1
     source $SDIRS
         
