@@ -1,7 +1,7 @@
 INSTALL_DIR=~/.local/bin
 
 all:
-	@echo "Pleas run 'make install'"
+	@echo "Please run 'make install'"
 
 install:
 	@echo ""
