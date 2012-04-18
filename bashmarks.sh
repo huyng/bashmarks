@@ -43,9 +43,9 @@ function s {
     check_help $1
     _bookmark_name_valid "$@"
     if [ -z "$exit_message" ]; then
-        _purge_line "$SDIRS" "export DIR_$1="
+        _purge_line "$SDIRS" "export DIR_$bookmark_name="
         CURDIR=$(echo $PWD| sed "s#^$HOME#\$HOME#g")
-        echo "export DIR_$1=\"$CURDIR\"" >> $SDIRS
+        echo "export DIR_$bookmark_name=\"$CURDIR\"" >> $SDIRS
     fi
 }
 
@@ -53,14 +53,24 @@ function s {
 function g {
     check_help $1
     source $SDIRS
-    cd "$(eval $(echo echo $(echo \$DIR_$1)))"
+    if [ -z $1 ] ; then
+        read bookmark_name
+    else
+        bookmark_name=$1
+    fi
+    cd "$(eval $(echo echo $(echo \$DIR_$bookmark_name)))"
 }
 
 # print bookmark
 function p {
     check_help $1
     source $SDIRS
-    echo "$(eval $(echo echo $(echo \$DIR_$1)))"
+    if [ -z $1 ] ; then
+        read bookmark_name
+    else
+        bookmark_name=$1
+    fi
+    echo "$(eval $(echo echo $(echo \$DIR_$bookmark_name)))"
 }
 
 # delete bookmark
@@ -68,8 +78,8 @@ function d {
     check_help $1
     _bookmark_name_valid "$@"
     if [ -z "$exit_message" ]; then
-        _purge_line "$SDIRS" "export DIR_$1="
-        unset "DIR_$1"
+        _purge_line "$SDIRS" "export DIR_$bookmark_name="
+        unset "DIR_$bookmark_name"
     fi
 }
 
@@ -82,6 +92,8 @@ function check_help {
         echo 'p <bookmark_name> - Prints the directory associated with "bookmark_name"'
         echo 'd <bookmark_name> - Deletes the bookmark'
         echo 'l                 - Lists all available bookmarks'
+        echo
+        echo 'If <bookmark_name> is not given, the name is read from standard input'
         kill -SIGINT $$
     fi
 }
@@ -107,11 +119,14 @@ function _l {
 function _bookmark_name_valid {
     exit_message=""
     if [ -z $1 ]; then
-        exit_message="bookmark name required"
-        echo $exit_message
-    elif [ "$1" != "$(echo $1 | sed 's/[^A-Za-z0-9_]//g')" ]; then
+        read bookmark_name
+    fi
+
+    if [ "$1" != "$(echo $1 | sed 's/[^A-Za-z0-9_]//g')" ]; then
         exit_message="bookmark name is not valid"
         echo $exit_message
+    else
+        bookmark_name=$1
     fi
 }
 
@@ -138,7 +153,7 @@ function _purge_line {
 
         # purge line
         sed "/$2/d" "$1" > "$t"
-        mv "$t" "$1"
+        cat "$t" > "$1"
 
         # cleanup temp file
         rm -f -- "$t"
