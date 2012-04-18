@@ -43,9 +43,15 @@ function s {
     check_help $1
     _bookmark_name_valid "$@"
     if [ -z "$exit_message" ]; then
-        _purge_line "$SDIRS" "export DIR_$1="
-        CURDIR=$(echo $PWD| sed "s#^$HOME#\$HOME#g")
-        echo "export DIR_$1=\"$CURDIR\"" >> $SDIRS
+        if [ -z "$@" ]; then
+            _purge_line "$SDIRS" "export DIR_DEFAULT="
+            CURDIR=$(echo $PWD| sed "s#^$HOME#\$HOME#g")
+            echo "export DIR_DEFAULT=\"$CURDIR\"" >> $SDIRS
+        else
+            _purge_line "$SDIRS" "export DIR_$1="
+            CURDIR=$(echo $PWD| sed "s#^$HOME#\$HOME#g")
+            echo "export DIR_$1=\"$CURDIR\"" >> $SDIRS
+        fi
     fi
 }
 
@@ -53,7 +59,11 @@ function s {
 function g {
     check_help $1
     source $SDIRS
-    cd "$(eval $(echo echo $(echo \$DIR_$1)))"
+    if [ -z "$@" ]; then
+        cd "$(eval $(echo echo $(echo \$DIR_DEFAULT)))"
+    else
+        cd "$(eval $(echo echo $(echo \$DIR_$1)))"
+    fi
 }
 
 # print bookmark
@@ -106,10 +116,7 @@ function _l {
 # validate bookmark name
 function _bookmark_name_valid {
     exit_message=""
-    if [ -z $1 ]; then
-        exit_message="bookmark name required"
-        echo $exit_message
-    elif [ "$1" != "$(echo $1 | sed 's/[^A-Za-z0-9_]//g')" ]; then
+    if [ "$1" != "$(echo $1 | sed 's/[^A-Za-z0-9_]//g')" ]; then
         exit_message="bookmark name is not valid"
         echo $exit_message
     fi
@@ -137,7 +144,7 @@ function _purge_line {
         trap "rm -f -- '$t'" EXIT
 
         # purge line
-        sed "/$2/d" "$1" > "$t"
+        sed "/$2/d" "$1" >! "$t"
         mv "$t" "$1"
 
         # cleanup temp file
