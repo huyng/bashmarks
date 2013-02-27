@@ -38,6 +38,9 @@ if [ ! -n "$SDIRS" ]; then
 fi
 touch $SDIRS
 
+RED="0;31m"
+GREEN="0;33m"
+
 # save current directory to bookmarks
 function s {
     check_help $1
@@ -53,7 +56,13 @@ function s {
 function g {
     check_help $1
     source $SDIRS
-    cd "$(eval $(echo echo $(echo \$DIR_$1)))"
+    target="$(eval $(echo echo $(echo \$DIR_$1)))"
+    if [ -n "$target" ]; then
+        echo -e "\033[${GREEN}Moving to ${target}\033[00m"
+        cd "$target"
+    else
+        echo -e "\033[${RED}${1} does not exist\033[00m"
+    fi
 }
 
 # print bookmark
@@ -98,7 +107,7 @@ function l {
     source $SDIRS
         
     # if color output is not working for you, comment out the line below '\033[1;32m' == "red"
-    env | sort | awk '/DIR_.+/{split(substr($0,5),parts,"="); printf("\033[1;31m%-20s\033[0m %s\n", parts[1], parts[2]);}'
+    env | sort | awk '/DIR_.+/{split(substr($0,5),parts,"="); printf("\033[0;33m%-20s\033[0m %s\n", parts[1], parts[2]);}'
     
     # uncomment this line if color output is not working with the line above
     # env | grep "^DIR_" | cut -c5- | sort |grep "^.*=" 
