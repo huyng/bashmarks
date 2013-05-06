@@ -60,7 +60,7 @@ function g {
     if [ -d "$target" ]; then
         cd "$target"
     else
-        echo -e "\033[${RED}${1} does not exist\033[00m"
+        echo -e "\033[${RED}WARNING: '${target}' does not exist\033[00m"
     fi
 }
 
