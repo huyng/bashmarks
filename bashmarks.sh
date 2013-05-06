@@ -59,6 +59,8 @@ function g {
     target="$(eval $(echo echo $(echo \$DIR_$1)))"
     if [ -d "$target" ]; then
         cd "$target"
+    elif [ ! -n "$target" ]; then
+        echo -e "\033[${RED}WARNING: '${1}' bashmark does not exist\033[00m"
     else
         echo -e "\033[${RED}WARNING: '${target}' does not exist\033[00m"
     fi
