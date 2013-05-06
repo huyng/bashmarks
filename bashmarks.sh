@@ -57,8 +57,7 @@ function g {
     check_help $1
     source $SDIRS
     target="$(eval $(echo echo $(echo \$DIR_$1)))"
-    if [ -n "$target" ]; then
-        echo -e "\033[${GREEN}Moving to ${target}\033[00m"
+    if [ -d "$target" ]; then
         cd "$target"
     else
         echo -e "\033[${RED}${1} does not exist\033[00m"
