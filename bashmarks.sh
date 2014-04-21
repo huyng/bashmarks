@@ -110,7 +110,7 @@ function l {
 # list bookmarks without dirname
 function _l {
     source $SDIRS
-    env | grep "^DIR_" | cut -c5- | sort | grep "^.*=" | cut -f1 -d "=" 
+    env | grep --color=never "^DIR_" | cut -c5- | sort | grep --color=never "^.*=" | cut -f1 -d "=" 
 }
 
 # validate bookmark name
