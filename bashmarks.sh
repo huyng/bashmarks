@@ -41,8 +41,12 @@ touch $SDIRS
 RED="0;31m"
 GREEN="0;33m"
 
+# set up prefix information
+BASHMARKS_DEFAULT_PREFIX=""
+BASHMARKS_PREFIX=${BASHMARKS_PREFIX:-$BASHMARKS_DEFAULT_PREFIX}
+
 # save current directory to bookmarks
-function s {
+function bashmarks_s {
     check_help $1
     _bookmark_name_valid "$@"
     if [ -z "$exit_message" ]; then
@@ -51,9 +55,10 @@ function s {
         echo "export DIR_$1=\"$CURDIR\"" >> $SDIRS
     fi
 }
+alias ${BASHMARKS_PREFIX}s=bashmarks_s
 
 # jump to bookmark
-function g {
+function bashmarks_g {
     check_help $1
     source $SDIRS
     target="$(eval $(echo echo $(echo \$DIR_$1)))"
@@ -65,16 +70,18 @@ function g {
         echo -e "\033[${RED}WARNING: '${target}' does not exist\033[00m"
     fi
 }
+alias ${BASHMARKS_PREFIX}g=bashmarks_g
 
 # print bookmark
-function p {
+function bashmarks_p {
     check_help $1
     source $SDIRS
     echo "$(eval $(echo echo $(echo \$DIR_$1)))"
 }
+alias ${BASHMARKS_PREFIX}p=bashmarks_p
 
 # delete bookmark
-function d {
+function bashmarks_d {
     check_help $1
     _bookmark_name_valid "$@"
     if [ -z "$exit_message" ]; then
@@ -82,6 +89,7 @@ function d {
         unset "DIR_$1"
     fi
 }
+alias ${BASHMARKS_PREFIX}d=bashmarks_d
 
 # print out help for the forgetful
 function check_help {
@@ -97,7 +105,7 @@ function check_help {
 }
 
 # list bookmarks with dirnam
-function l {
+function bashmarks_l {
     check_help $1
     source $SDIRS
         
@@ -107,11 +115,14 @@ function l {
     # uncomment this line if color output is not working with the line above
     # env | grep "^DIR_" | cut -c5- | sort |grep "^.*=" 
 }
+alias ${BASHMARKS_PREFIX}l=bashmarks_l
+
 # list bookmarks without dirname
-function _l {
+function bashmarks__l {
     source $SDIRS
     env | grep "^DIR_" | cut -c5- | sort | grep "^.*=" | cut -f1 -d "=" 
 }
+alias ${BASHMARKS_PREFIX}_l=bashmarks__l
 
 # validate bookmark name
 function _bookmark_name_valid {
