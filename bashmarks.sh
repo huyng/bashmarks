@@ -23,14 +23,14 @@
 
 
 # USAGE: 
-# s bookmarkname - saves the curr dir as bookmarkname
-# g bookmarkname - jumps to the that bookmark
-# g b[TAB] - tab completion is available
-# p bookmarkname - prints the bookmark
-# p b[TAB] - tab completion is available
-# d bookmarkname - deletes the bookmark
-# d [TAB] - tab completion is available
-# l - list all bookmarks
+# <command_prefix>s bookmarkname - saves the curr dir as bookmarkname
+# <command_prefix>g bookmarkname - jumps to the that bookmark
+# <command_prefix>g b[TAB] - tab completion is available
+# <command_prefix>p bookmarkname - prints the bookmark
+# <command_prefix>p b[TAB] - tab completion is available
+# <command_prefix>d bookmarkname - deletes the bookmark
+# <command_prefix>d [TAB] - tab completion is available
+# <command_prefix>l - list all bookmarks
 
 # setup file to store bookmarks
 if [ ! -n "$SDIRS" ]; then
@@ -95,11 +95,11 @@ alias ${BASHMARKS_PREFIX}d=bashmarks_d
 function check_help {
     if [ "$1" = "-h" ] || [ "$1" = "-help" ] || [ "$1" = "--help" ] ; then
         echo ''
-        echo 's <bookmark_name> - Saves the current directory as "bookmark_name"'
-        echo 'g <bookmark_name> - Goes (cd) to the directory associated with "bookmark_name"'
-        echo 'p <bookmark_name> - Prints the directory associated with "bookmark_name"'
-        echo 'd <bookmark_name> - Deletes the bookmark'
-        echo 'l                 - Lists all available bookmarks'
+        echo '<command_prefix>s <bookmark_name> - Saves the current directory as "bookmark_name"'
+        echo '<command_prefix>g <bookmark_name> - Goes (cd) to the directory associated with "bookmark_name"'
+        echo '<command_prefix>p <bookmark_name> - Prints the directory associated with "bookmark_name"'
+        echo '<command_prefix>d <bookmark_name> - Deletes the bookmark'
+        echo '<command_prefix>l                 - Lists all available bookmarks'
         kill -SIGINT $$
     fi
 }
@@ -169,12 +169,12 @@ function _purge_line {
 
 # bind completion command for g,p,d to _comp
 if [ $ZSH_VERSION ]; then
-    compctl -K _compzsh g
-    compctl -K _compzsh p
-    compctl -K _compzsh d
+    compctl -K _compzsh bashmarks_g
+    compctl -K _compzsh bashmarks_p
+    compctl -K _compzsh bashmarks_d
 else
     shopt -s progcomp
-    complete -F _comp g
-    complete -F _comp p
-    complete -F _comp d
+    complete -F _comp bashmarks_g
+    complete -F _comp bashmarks_p
+    complete -F _comp bashmarks_d
 fi
