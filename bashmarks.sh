@@ -23,14 +23,14 @@
 
 
 # USAGE: 
-# s bookmarkname - saves the curr dir as bookmarkname
-# g bookmarkname - jumps to the that bookmark
-# g b[TAB] - tab completion is available
-# p bookmarkname - prints the bookmark
-# p b[TAB] - tab completion is available
-# d bookmarkname - deletes the bookmark
-# d [TAB] - tab completion is available
-# l - list all bookmarks
+# <command_prefix>s bookmarkname - saves the curr dir as bookmarkname
+# <command_prefix>g bookmarkname - jumps to the that bookmark
+# <command_prefix>g b[TAB] - tab completion is available
+# <command_prefix>p bookmarkname - prints the bookmark
+# <command_prefix>p b[TAB] - tab completion is available
+# <command_prefix>d bookmarkname - deletes the bookmark
+# <command_prefix>d [TAB] - tab completion is available
+# <command_prefix>l - list all bookmarks
 
 # setup file to store bookmarks
 if [ ! -n "$SDIRS" ]; then
@@ -41,8 +41,12 @@ touch $SDIRS
 RED="0;31m"
 GREEN="0;33m"
 
+# set up prefix information
+BASHMARKS_DEFAULT_PREFIX=""
+BASHMARKS_PREFIX=${BASHMARKS_PREFIX:-$BASHMARKS_DEFAULT_PREFIX}
+
 # save current directory to bookmarks
-function s {
+function bashmarks_s {
     check_help $1
     _bookmark_name_valid "$@"
     if [ -z "$exit_message" ]; then
@@ -51,9 +55,10 @@ function s {
         echo "export DIR_$1=\"$CURDIR\"" >> $SDIRS
     fi
 }
+alias ${BASHMARKS_PREFIX}s=bashmarks_s
 
 # jump to bookmark
-function g {
+function bashmarks_g {
     check_help $1
     source $SDIRS
     target="$(eval $(echo echo $(echo \$DIR_$1)))"
@@ -65,16 +70,18 @@ function g {
         echo -e "\033[${RED}WARNING: '${target}' does not exist\033[00m"
     fi
 }
+alias ${BASHMARKS_PREFIX}g=bashmarks_g
 
 # print bookmark
-function p {
+function bashmarks_p {
     check_help $1
     source $SDIRS
     echo "$(eval $(echo echo $(echo \$DIR_$1)))"
 }
+alias ${BASHMARKS_PREFIX}p=bashmarks_p
 
 # delete bookmark
-function d {
+function bashmarks_d {
     check_help $1
     _bookmark_name_valid "$@"
     if [ -z "$exit_message" ]; then
@@ -82,22 +89,23 @@ function d {
         unset "DIR_$1"
     fi
 }
+alias ${BASHMARKS_PREFIX}d=bashmarks_d
 
 # print out help for the forgetful
 function check_help {
     if [ "$1" = "-h" ] || [ "$1" = "-help" ] || [ "$1" = "--help" ] ; then
         echo ''
-        echo 's <bookmark_name> - Saves the current directory as "bookmark_name"'
-        echo 'g <bookmark_name> - Goes (cd) to the directory associated with "bookmark_name"'
-        echo 'p <bookmark_name> - Prints the directory associated with "bookmark_name"'
-        echo 'd <bookmark_name> - Deletes the bookmark'
-        echo 'l                 - Lists all available bookmarks'
+        echo '<command_prefix>s <bookmark_name> - Saves the current directory as "bookmark_name"'
+        echo '<command_prefix>g <bookmark_name> - Goes (cd) to the directory associated with "bookmark_name"'
+        echo '<command_prefix>p <bookmark_name> - Prints the directory associated with "bookmark_name"'
+        echo '<command_prefix>d <bookmark_name> - Deletes the bookmark'
+        echo '<command_prefix>l                 - Lists all available bookmarks'
         kill -SIGINT $$
     fi
 }
 
 # list bookmarks with dirnam
-function l {
+function bashmarks_l {
     check_help $1
     source $SDIRS
         
@@ -107,11 +115,14 @@ function l {
     # uncomment this line if color output is not working with the line above
     # env | grep "^DIR_" | cut -c5- | sort |grep "^.*=" 
 }
+alias ${BASHMARKS_PREFIX}l=bashmarks_l
+
 # list bookmarks without dirname
-function _l {
+function bashmarks__l {
     source $SDIRS
     env | grep "^DIR_" | cut -c5- | sort | grep "^.*=" | cut -f1 -d "=" 
 }
+alias ${BASHMARKS_PREFIX}_l=bashmarks__l
 
 # validate bookmark name
 function _bookmark_name_valid {
@@ -158,12 +169,12 @@ function _purge_line {
 
 # bind completion command for g,p,d to _comp
 if [ $ZSH_VERSION ]; then
-    compctl -K _compzsh g
-    compctl -K _compzsh p
-    compctl -K _compzsh d
+    compctl -K _compzsh bashmarks_g
+    compctl -K _compzsh bashmarks_p
+    compctl -K _compzsh bashmarks_d
 else
     shopt -s progcomp
-    complete -F _comp g
-    complete -F _comp p
-    complete -F _comp d
+    complete -F _comp bashmarks_g
+    complete -F _comp bashmarks_p
+    complete -F _comp bashmarks_d
 fi

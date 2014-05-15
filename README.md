@@ -4,15 +4,28 @@
 
 1. git clone git://github.com/huyng/bashmarks.git
 2. make install
-3. source **~/.local/bin/bashmarks.sh** from within your **~.bash\_profile** or **~/.bashrc** file
+3. add optional [command prefix](#command-prefix)
+4. source **~/.local/bin/bashmarks.sh** from within your **~.bash\_profile** or **~/.bashrc** file
+
+## Command Prefix
+
+Because the aliases that Bashmarks uses might already be in use on your system, Bashmarks allows you
+to specify a "command prefix":
+
+```bash
+export BASHMARKS_PREFIX="bm"
+```
+
+If this is specified, the prefix must be used before any Bashmarks command; if it is not specified,
+the aliases can be used as-is.
 
 ## Shell Commands
 
-    s <bookmark_name> - Saves the current directory as "bookmark_name"
-    g <bookmark_name> - Goes (cd) to the directory associated with "bookmark_name"
-    p <bookmark_name> - Prints the directory associated with "bookmark_name"
-    d <bookmark_name> - Deletes the bookmark
-    l                 - Lists all available bookmarks
+    <command_prefix>s <bookmark_name> - Saves the current directory as "bookmark_name"
+    <command_prefix>g <bookmark_name> - Goes (cd) to the directory associated with "bookmark_name"
+    <command_prefix>p <bookmark_name> - Prints the directory associated with "bookmark_name"
+    <command_prefix>d <bookmark_name> - Deletes the bookmark
+    <command_prefix>l                 - Lists all available bookmarks
     
 ## Example Usage
 
