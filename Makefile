@@ -1,4 +1,5 @@
 INSTALL_DIR=~/.local/bin
+BASHRC_DIR=~/.bashrc
 
 all:
 	@echo "Please run 'make install'"
