@@ -1,5 +1,5 @@
 INSTALL_DIR=~/.local/bin
-BASHRC_DIR=~/.bashrc
+BASHRC_FILE=~/.bashrc
 
 all:
 	@echo "Please run 'make install'"
@@ -18,4 +18,4 @@ install:
 	@echo 'p <bookmark_name> - Prints the directory associated with "bookmark_name"'
 	@echo 'd <bookmark_name> - Deletes the bookmark'
 	@echo 'l                 - Lists all available bookmarks'
-	@echo "source ~/.local/bin/bashmarks.sh" >> $(BASHRC_DIR)
+	@echo "source ~/.local/bin/bashmarks.sh" >> $(BASHRC_FILE)
