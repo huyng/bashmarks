@@ -23,14 +23,14 @@
 
 
 # USAGE: 
-# s bookmarkname - saves the curr dir as bookmarkname
-# g bookmarkname - jumps to the that bookmark
-# g b[TAB] - tab completion is available
-# p bookmarkname - prints the bookmark
-# p b[TAB] - tab completion is available
-# d bookmarkname - deletes the bookmark
-# d [TAB] - tab completion is available
-# l - list all bookmarks
+# bms bookmarkname - saves the curr dir as bookmarkname
+# bmg bookmarkname - jumps to the that bookmark
+# bmg b[TAB] - tab completion is available
+# bmp bookmarkname - prints the bookmark
+# bmp b[TAB] - tab completion is available
+# bmd bookmarkname - deletes the bookmark
+# bmd [TAB] - tab completion is available
+# bml - list all bookmarks
 
 # setup file to store bookmarks
 if [ ! -n "$SDIRS" ]; then
@@ -42,7 +42,7 @@ RED="0;31m"
 GREEN="0;33m"
 
 # save current directory to bookmarks
-function s {
+function bms {
     check_help $1
     _bookmark_name_valid "$@"
     if [ -z "$exit_message" ]; then
@@ -53,7 +53,7 @@ function s {
 }
 
 # jump to bookmark
-function g {
+function bmg {
     check_help $1
     source $SDIRS
     target="$(eval $(echo echo $(echo \$DIR_$1)))"
@@ -67,14 +67,14 @@ function g {
 }
 
 # print bookmark
-function p {
+function bmp {
     check_help $1
     source $SDIRS
     echo "$(eval $(echo echo $(echo \$DIR_$1)))"
 }
 
 # delete bookmark
-function d {
+function bmd {
     check_help $1
     _bookmark_name_valid "$@"
     if [ -z "$exit_message" ]; then
@@ -87,17 +87,17 @@ function d {
 function check_help {
     if [ "$1" = "-h" ] || [ "$1" = "-help" ] || [ "$1" = "--help" ] ; then
         echo ''
-        echo 's <bookmark_name> - Saves the current directory as "bookmark_name"'
-        echo 'g <bookmark_name> - Goes (cd) to the directory associated with "bookmark_name"'
-        echo 'p <bookmark_name> - Prints the directory associated with "bookmark_name"'
-        echo 'd <bookmark_name> - Deletes the bookmark'
-        echo 'l                 - Lists all available bookmarks'
+        echo 'bms <bookmark_name> - Saves the current directory as "bookmark_name"'
+        echo 'bmg <bookmark_name> - Goes (cd) to the directory associated with "bookmark_name"'
+        echo 'bmp <bookmark_name> - Prints the directory associated with "bookmark_name"'
+        echo 'bmd <bookmark_name> - Deletes the bookmark'
+        echo 'bml                 - Lists all available bookmarks'
         kill -SIGINT $$
     fi
 }
 
 # list bookmarks with dirnam
-function l {
+function bml {
     check_help $1
     source $SDIRS
         
@@ -122,7 +122,7 @@ function _bookmark_name_valid {
     elif [ "$1" != "$(echo $1 | sed 's/[^A-Za-z0-9_]//g')" ]; then
         exit_message="bookmark name is not valid"
         echo $exit_message
-    fi
+	fi
 }
 
 # completion command
@@ -158,12 +158,12 @@ function _purge_line {
 
 # bind completion command for g,p,d to _comp
 if [ $ZSH_VERSION ]; then
-    compctl -K _compzsh g
-    compctl -K _compzsh p
-    compctl -K _compzsh d
+    compctl -K _compzsh bmg
+    compctl -K _compzsh bmp
+    compctl -K _compzsh bmd
 else
     shopt -s progcomp
-    complete -F _comp g
-    complete -F _comp p
-    complete -F _comp d
+    complete -F _comp bmg
+    complete -F _comp bmp
+    complete -F _comp bmd
 fi

@@ -9,21 +9,21 @@
 
 ## Shell Commands
 
-    s <bookmark_name> - Saves the current directory as "bookmark_name"
-    g <bookmark_name> - Goes (cd) to the directory associated with "bookmark_name"
-    p <bookmark_name> - Prints the directory associated with "bookmark_name"
-    d <bookmark_name> - Deletes the bookmark
-    l                 - Lists all available bookmarks
+    bms <bookmark_name> - Saves the current directory as "bookmark_name"
+    bmg <bookmark_name> - Goes (cd) to the directory associated with "bookmark_name"
+    bmp <bookmark_name> - Prints the directory associated with "bookmark_name"
+    bmd <bookmark_name> - Deletes the bookmark
+    bml                 - Lists all available bookmarks
     
 ## Example Usage
 
     $ cd /var/www/
-    $ s webfolder
+    $ bms webfolder
     $ cd /usr/local/lib/
-    $ s locallib
-    $ l
-    $ g web<tab>
-    $ g webfolder
+    $ bms locallib
+    $ bml
+    $ bmg web<tab>
+    $ bmg webfolder
 
 ## Where Bashmarks are stored
     
