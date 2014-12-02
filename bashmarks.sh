@@ -83,6 +83,11 @@ function d {
     fi
 }
 
+# print out the help
+function h {
+    check_help "-h"
+}
+
 # print out help for the forgetful
 function check_help {
     if [ "$1" = "-h" ] || [ "$1" = "-help" ] || [ "$1" = "--help" ] ; then
@@ -92,6 +97,7 @@ function check_help {
         echo 'p <bookmark_name> - Prints the directory associated with "bookmark_name"'
         echo 'd <bookmark_name> - Deletes the bookmark'
         echo 'l                 - Lists all available bookmarks'
+        echo 'h                 - Shows this help'
         kill -SIGINT $$
     fi
 }
