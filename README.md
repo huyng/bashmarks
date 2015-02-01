@@ -2,29 +2,50 @@
 
 ## Install
 
-1. git clone git://github.com/huyng/bashmarks.git
+1. git clone https://github.com/leogtzr/bashmarks.git
 2. cd bashmarks
 3. make install
 4. source **~/.local/bin/bashmarks.sh** from within your **~.bash\_profile** or **~/.bashrc** file
 
 ## Shell Commands
 
-    s <bookmark_name> - Saves the current directory as "bookmark_name"
-    g <bookmark_name> - Goes (cd) to the directory associated with "bookmark_name"
-    p <bookmark_name> - Prints the directory associated with "bookmark_name"
-    d <bookmark_name> - Deletes the bookmark
-    l                 - Lists all available bookmarks
+    USAGE: 
+sv bookmarkname  - Saves the current directory as "bookmark_name"
+gbm bookmarkname - Goes (cd) to the directory associated with "bookmark_name"
+gbm b[TAB] 		 - tab completion is available
+pbm bookmarkname - Prints the directory associated with "bookmark_name"
+pbm b[TAB]       - tab completion is available
+pbmi         	 - print bookmarks using a menu
+dbm bookmarkname - Deletes the bookmark
+dbm b[TAB] 		 - tab completion is available
+lbm 			 - Lists all available bookmarks
     
 ## Example Usage
 
-    $ cd /var/www/
-    $ s webfolder
-    $ cd /usr/local/lib/
-    $ s locallib
-    $ l
-    $ g web<tab>
-    $ g webfolder
+$ cd /var/www/
+$ sv webfolder
+$ cd /usr/local/lib/
+$ sv locallib
+$ lbm
+$ gbm web<tab>
+$ gbm webfolder
+
+[leo@~]$ cd /var/www/
+[leo@www]$ sv webfolder
+[leo@www]$ cd /usr/local/lib/
+[leo@lib]$ sv libdir
+[leo@lib]$ lbm
+webfolder
+libdir
+[leo@lib]$ gbm webfolder 
+[leo@www]$ pbmi 
+1) webfolder
+2) libdir
+Bookmark number: 2
+[leo@lib]$ pwd
+/usr/local/lib
+[leo@lib]$ 
 
 ## Where Bashmarks are stored
     
-All of your directory bookmarks are saved in a file called ".sdirs" in your HOME directory.
+All of your directory bookmarks are saved in a file called ".bm.txt" ($HOME/.bm.txt) in your $HOME directory.
