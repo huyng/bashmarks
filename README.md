@@ -22,29 +22,29 @@ lbm 			 - Lists all available bookmarks
     
 ## Example Usage
 
-$ cd /var/www/
-$ sv webfolder
-$ cd /usr/local/lib/
-$ sv locallib
-$ lbm
-$ gbm web<tab>
-$ gbm webfolder
+	$ cd /var/www/
+	$ sv webfolder
+	$ cd /usr/local/lib/
+	$ sv locallib
+	$ lbm
+	$ gbm web<tab>
+	$ gbm webfolder
 
-[leo@~]$ cd /var/www/
-[leo@www]$ sv webfolder
-[leo@www]$ cd /usr/local/lib/
-[leo@lib]$ sv libdir
-[leo@lib]$ lbm
-webfolder
-libdir
-[leo@lib]$ gbm webfolder 
-[leo@www]$ pbmi 
-1) webfolder
-2) libdir
-Bookmark number: 2
-[leo@lib]$ pwd
-/usr/local/lib
-[leo@lib]$ 
+	[leo@~]$ cd /var/www/
+	[leo@www]$ sv webfolder
+	[leo@www]$ cd /usr/local/lib/
+	[leo@lib]$ sv libdir
+	[leo@lib]$ lbm
+	webfolder
+	libdir
+	[leo@lib]$ gbm webfolder 
+	[leo@www]$ pbmi 
+	1) webfolder
+	2) libdir
+	Bookmark number: 2
+	[leo@lib]$ pwd
+	/usr/local/lib
+	[leo@lib]$ 
 
 ## Where Bashmarks are stored
     
