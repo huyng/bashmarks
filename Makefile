@@ -5,17 +5,25 @@ all:
 
 install:
 	@echo ""
-	mkdir -p $(INSTALL_DIR)
-	cp bashmarks.sh $(INSTALL_DIR)
-	@echo ""
+	mkdir -vp $(INSTALL_DIR)
+	cp -v bashmarks.sh $(INSTALL_DIR)
+	@echo "bashmarks.sh installed ... "
 	@echo "Please add 'source $(INSTALL_DIR)/bashmarks.sh' to your .bashrc file"
-	@echo ''
-	@echo 'USAGE:'
-	@echo '------'
-	@echo 's <bookmark_name> - Saves the current directory as "bookmark_name"'
-	@echo 'g <bookmark_name> - Goes (cd) to the directory associated with "bookmark_name"'
-	@echo 'p <bookmark_name> - Prints the directory associated with "bookmark_name"'
-	@echo 'd <bookmark_name> - Deletes the bookmark'
-	@echo 'l                 - Lists all available bookmarks'
+	@echo "bashmarks.sh installed ... "
+	
+help:
+
+	@echo
+	@echo 'USAGE: '
+	@echo 'sv bookmarkname - saves the curr dir as bookmarkname'
+	@echo 'gbm bookmarkname - jumps to the that bookmark'
+	@echo 'gbm b[TAB] - tab completion is available'
+	@echo 'pbm bookmarkname - prints the bookmark'
+	@echo 'pbm b[TAB] - tab completion is available'
+	@echo 'pbmi - print bookmarks using a menu'
+	@echo 'dbm bookmarkname - deletes the bookmark'
+	@echo 'dbm [TAB] - tab completion is available'
+	@echo 'lbm - list all bookmarks'
+	@echo
 
 .PHONY: all install
