@@ -10,15 +10,15 @@
 ## Shell Commands
 
     USAGE: 
-sv bookmarkname  - Saves the current directory as "bookmark_name"
-gbm bookmarkname - Goes (cd) to the directory associated with "bookmark_name"
-gbm b[TAB] 		 - tab completion is available
-pbm bookmarkname - Prints the directory associated with "bookmark_name"
-pbm b[TAB]       - tab completion is available
-pbmi         	 - print bookmarks using a menu
-dbm bookmarkname - Deletes the bookmark
-dbm b[TAB] 		 - tab completion is available
-lbm 			 - Lists all available bookmarks
+	sv bookmarkname  - Saves the current directory as "bookmark_name"
+	gbm bookmarkname - Goes (cd) to the directory associated with "bookmark_name"
+	gbm b[TAB] 		 - tab completion is available
+	pbm bookmarkname - Prints the directory associated with "bookmark_name"
+	pbm b[TAB]       - tab completion is available
+	pbmi         	 - print bookmarks using a menu
+	dbm bookmarkname - Deletes the bookmark
+	dbm b[TAB] 		 - tab completion is available
+	lbm 			 - Lists all available bookmarks
     
 ## Example Usage
 
