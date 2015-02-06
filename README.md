@@ -19,6 +19,7 @@
 	dbm bookmarkname - Deletes the bookmark
 	dbm b[TAB] 		 - tab completion is available
 	lbm 			 - Lists all available bookmarks
+	d_c 			 - Remove all bookmarks
     
 ## Example Usage
 
