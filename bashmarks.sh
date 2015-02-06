@@ -20,6 +20,7 @@ pbm b[TAB] - tab completion is available
 pbmi - print bookmarks using a menu
 dbm bookmarkname - deletes the bookmark
 dbm [TAB] - tab completion is available
+d_c - Remove all bookmarks
 lbm - list all bookmarks
 
 BOOKMARKS_HELP
@@ -27,6 +28,24 @@ BOOKMARKS_HELP
 
 is_valid() {
     [[ "$1" =~ ^[a-zA-Z0-9_]+$ ]] && return 0 || return 1
+}
+
+ask () { 
+    read -p "$@ [y/n] " ans
+    case "$ans" in 
+        y*|Y*)
+            return 0
+        ;;
+        *)
+            return 1
+        ;;
+    esac
+}
+
+d_c() {
+    if ask "Remove all bookmarks"; then
+        sed -n -i '1,$d' "${BM_FILE}"
+    fi
 }
 
 # Add bookmark
@@ -127,7 +146,7 @@ pbmi() {
     local BOOKMARK_OPT_TXT=$PS3
     PS3="Bookmark number: "
     select _OPTION in `ls_bookmarks`; do
-        gbm "${_OPTION}"
+        pbm "${_OPTION}"
         break
     done
     PS3="$BOOKMARK_OPT_TXT"

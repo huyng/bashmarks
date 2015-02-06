@@ -24,6 +24,7 @@ help:
 	@echo 'dbm bookmarkname - deletes the bookmark'
 	@echo 'dbm [TAB] - tab completion is available'
 	@echo 'lbm - list all bookmarks'
+	@echo 'd_c - Remove all bookmarks'
 	@echo
 
 .PHONY: all install
