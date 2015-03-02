@@ -150,10 +150,10 @@ sv() {
             add_bookmark "$1"
         else
             [ $COLOR_ENABLED -eq 1 ] && {
-            echo -e "${BRED}Bookmark NOT valid.${COLOR_OFF}"
-        } || {
-            echo -e "Bookmark NOT valid."
-        }
+                echo -e "${BRED}Bookmark NOT valid.${COLOR_OFF}"
+            } || {
+                echo -e "Bookmark NOT valid."
+            }
         fi
     else
         bookmarks_help
