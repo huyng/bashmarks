@@ -11,7 +11,6 @@
 
     USAGE: 
 	bmsv bookmarkname - saves the curr dir as bookmarkname
-	bmsv bookmarkname tag1:tag2:tag3
 	bmg bookmarkname - jumps to the that bookmark
 	bmg b[TAB] - tab completion is available
 	bmp bookmarkname - prints the bookmark
