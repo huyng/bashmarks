@@ -10,36 +10,37 @@
 ## Shell Commands
 
     USAGE: 
-	sv bookmarkname  - Saves the current directory as "bookmark_name"
-	gbm bookmarkname - Goes (cd) to the directory associated with "bookmark_name"
-	gbm b[TAB] 		 - tab completion is available
-	pbm bookmarkname - Prints the directory associated with "bookmark_name"
-	pbm b[TAB]       - tab completion is available
-	pbmi         	 - print bookmarks using a menu
-	dbm bookmarkname - Deletes the bookmark
-	dbm b[TAB] 		 - tab completion is available
-	lbm 			 - Lists all available bookmarks
-	d_c 			 - Remove all bookmarks
+	bmsv bookmarkname - saves the curr dir as bookmarkname
+	bmsv bookmarkname tag1:tag2:tag3
+	bmg bookmarkname - jumps to the that bookmark
+	bmg b[TAB] - tab completion is available
+	bmp bookmarkname - prints the bookmark
+	bmp b[TAB] - tab completion is available
+	bmpi - print bookmarks using a menu
+	bmd bookmarkname - deletes the bookmark
+	bmd [TAB] - tab completion is available
+	bmra - Remove all bookmarks
+	bml - list all bookmarks
     
 ## Example Usage
 
 	$ cd /var/www/
-	$ sv webfolder
+	$ bmsv webfolder
 	$ cd /usr/local/lib/
-	$ sv locallib
-	$ lbm
-	$ gbm web<tab>
-	$ gbm webfolder
+	$ bmsv locallib
+	$ bml
+	$ bmg web<tab>
+	$ bmg webfolder
 
 	[leo@~]$ cd /var/www/
-	[leo@www]$ sv webfolder
+	[leo@www]$ bmsv webfolder
 	[leo@www]$ cd /usr/local/lib/
-	[leo@lib]$ sv libdir
-	[leo@lib]$ lbm
+	[leo@lib]$ bmsv libdir
+	[leo@lib]$ bml
 	webfolder
 	libdir
-	[leo@lib]$ gbm webfolder 
-	[leo@www]$ pbmi 
+	[leo@lib]$ bmg webfolder 
+	[leo@www]$ bmpi 
 	1) webfolder
 	2) libdir
 	Bookmark number: 2

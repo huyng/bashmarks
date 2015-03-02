@@ -31,16 +31,17 @@ bookmarks_help() {
 cat <<BOOKMARKS_HELP
  
 USAGE: 
-sv bookmarkname - saves the curr dir as bookmarkname
-gbm bookmarkname - jumps to the that bookmark
-gbm b[TAB] - tab completion is available
-pbm bookmarkname - prints the bookmark
-pbm b[TAB] - tab completion is available
-pbmi - print bookmarks using a menu
-dbm bookmarkname - deletes the bookmark
-dbm [TAB] - tab completion is available
-d_c - Remove all bookmarks
-lbm - list all bookmarks
+bmsv bookmarkname - saves the curr dir as bookmarkname
+bmsv bookmarkname tag1:tag2:tag3
+bmg bookmarkname - jumps to the that bookmark
+bmg b[TAB] - tab completion is available
+bmp bookmarkname - prints the bookmark
+bmp b[TAB] - tab completion is available
+bmpi - print bookmarks using a menu
+bmd bookmarkname - deletes the bookmark
+bmd [TAB] - tab completion is available
+bmra - Remove all bookmarks
+bml - list all bookmarks
 
 BOOKMARKS_HELP
 }
@@ -61,7 +62,8 @@ ask () {
     esac
 }
 
-d_c() {
+# Remove all bookmarks.
+bmra() {
     if ask "Remove all bookmarks"; then
         sed -n -i '1,$d' "${BM_FILE}"
     fi
@@ -91,7 +93,7 @@ ls_bookmarks() {
 }
 
 # Go to bookmark
-gbm() {
+bmg() {
     if [ ! -z "$1" ]; then
         local TARGET=`grep -E "^$1" "${BM_FILE}" | awk -F '=' '{print $2}'`
         cd "${TARGET}"
@@ -105,7 +107,7 @@ gbm() {
 }
 
 # Print bookmark
-pbm() {
+bmp() {
 
     [ -z "$1" ] && {
         bookmarks_help
@@ -130,7 +132,7 @@ pbm() {
 }
 
 # Delete bookmark
-dbm() {
+bmd() {
     local BOOKMARK="$1"
     grep -Eq "^${BOOKMARK}.*" "${BM_FILE}" && {
         sed -i "/^${BOOKMARK}/d" "${BM_FILE}"
@@ -144,7 +146,7 @@ dbm() {
 }
 
 # Save bookmark 
-sv() {
+bmsv() {
     if [ ! -z "$1" ]; then
         if is_valid "$1"; then
             add_bookmark "$1"
@@ -161,18 +163,18 @@ sv() {
 }
 
 # Print bookmarks using select
-pbmi() {
+bmpi() {
     local BOOKMARK_OPT_TXT=$PS3
     PS3="Bookmark number: "
     select _OPTION in `ls_bookmarks`; do
-        pbm "${_OPTION}"
+        bmp "${_OPTION}"
         break
     done
     PS3="$BOOKMARK_OPT_TXT"
 }
 
 # List bookmarks
-lbm() {
+bml() {
     [ -f "${BM_FILE}" ] && {
         awk -F '=' '{print $1}' "${BM_FILE}"
     } || {
@@ -189,7 +191,7 @@ function _comp {
 }
 
 shopt -s progcomp
-complete -F _comp gbm
-complete -F _comp pbm
-complete -F _comp dbm
+complete -F _comp bmg
+complete -F _comp bmp
+complete -F _comp bmd
 
