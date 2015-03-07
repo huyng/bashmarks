@@ -15,16 +15,16 @@ help:
 
 	@echo
 	@echo 'USAGE: '
-	@echo 'sv bookmarkname - saves the curr dir as bookmarkname'
-	@echo 'gbm bookmarkname - jumps to the that bookmark'
-	@echo 'gbm b[TAB] - tab completion is available'
-	@echo 'pbm bookmarkname - prints the bookmark'
-	@echo 'pbm b[TAB] - tab completion is available'
-	@echo 'pbmi - print bookmarks using a menu'
-	@echo 'dbm bookmarkname - deletes the bookmark'
-	@echo 'dbm [TAB] - tab completion is available'
-	@echo 'lbm - list all bookmarks'
-	@echo 'd_c - Remove all bookmarks'
+	@echo 'bmsv bookmarkname - saves the curr dir as bookmarkname'
+	@echo 'bmg bookmarkname - jumps to the that bookmark'
+	@echo 'bmg b[TAB] - tab completion is available'
+	@echo 'bmp bookmarkname - prints the bookmark'
+	@echo 'bmp b[TAB] - tab completion is available'
+	@echo 'bmpi - print bookmarks using a menu'
+	@echo 'bmd bookmarkname - deletes the bookmark'
+	@echo 'bmd [TAB] - tab completion is available'
+	@echo 'bmra - Remove all bookmarks'
+	@echo 'bml - list all bookmarks'
 	@echo
 
 .PHONY: all install

@@ -45,20 +45,14 @@ bml - list all bookmarks
 BOOKMARKS_HELP
 }
 
+# Checks if a bookmark identifies is valid.
 is_valid() {
     [[ "$1" =~ ^[a-zA-Z0-9_]+$ ]] && return 0 || return 1
 }
 
 ask () { 
     read -p "$@ [y/n] " ans
-    case "$ans" in 
-        y*|Y*)
-            return 0
-        ;;
-        *)
-            return 1
-        ;;
-    esac
+    echo "$ans" | grep -qi "^y$" && return 0 || return 1
 }
 
 # Remove all bookmarks.
@@ -182,7 +176,7 @@ bml() {
 }
 
 # completion command
-function _comp {
+_comp {
     COMPREPLY=()
     local curw=${COMP_WORDS[COMP_CWORD]}
     COMPREPLY=($(compgen -W '`ls_bookmarks`' -- $curw))
