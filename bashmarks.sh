@@ -148,7 +148,7 @@ function _purge_line {
 
         # purge line
         sed "/$2/d" "$1" > "$t"
-        mv "$t" "$1"
+        mv -f "$t" "$1"
 
         # cleanup temp file
         rm -f -- "$t"
