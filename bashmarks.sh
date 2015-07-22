@@ -144,14 +144,14 @@ function _purge_line {
     if [ -s "$1" ]; then
         # safely create a temp file
         t=$(mktemp -t bashmarks.XXXXXX) || exit 1
-        trap "rm -f -- '$t'" EXIT
+        trap "/bin/rm -f -- '$t'" EXIT
 
         # purge line
         sed "/$2/d" "$1" > "$t"
-        mv "$t" "$1"
+        /bin/mv "$t" "$1"
 
         # cleanup temp file
-        rm -f -- "$t"
+        /bin/rm -f -- "$t"
         trap - EXIT
     fi
 }
