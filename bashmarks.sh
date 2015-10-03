@@ -66,6 +66,20 @@ function g {
     fi
 }
 
+# open bookmark in mac
+function o {
+    check_help $1
+    source $SDIRS
+    target="$(eval $(echo echo $(echo \$DIR_$1)))"
+    if [ -d "$target" ]; then
+        open "$target"
+    elif [ ! -n "$target" ]; then
+        echo -e "\033[${RED}WARNING: '${1}' bashmark does not exist\033[00m"
+    else
+        echo -e "\033[${RED}WARNING: '${target}' does not exist\033[00m"
+    fi
+}
+
 # print bookmark
 function p {
     check_help $1
