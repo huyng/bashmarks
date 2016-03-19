@@ -42,7 +42,7 @@ RED="0;31m"
 GREEN="0;33m"
 
 # save current directory to bookmarks
-function s {
+function bashmarks_save {
     check_help $1
     _bookmark_name_valid "$@"
     if [ -z "$exit_message" ]; then
@@ -53,7 +53,7 @@ function s {
 }
 
 # jump to bookmark
-function g {
+function bashmarks_jump {
     check_help $1
     source $SDIRS
     target="$(eval $(echo echo $(echo \$DIR_$1)))"
@@ -67,14 +67,14 @@ function g {
 }
 
 # print bookmark
-function p {
+function bashmarks_print {
     check_help $1
     source $SDIRS
     echo "$(eval $(echo echo $(echo \$DIR_$1)))"
 }
 
 # delete bookmark
-function d {
+function bashmarks_delete {
     check_help $1
     _bookmark_name_valid "$@"
     if [ -z "$exit_message" ]; then
@@ -87,17 +87,17 @@ function d {
 function check_help {
     if [ "$1" = "-h" ] || [ "$1" = "-help" ] || [ "$1" = "--help" ] ; then
         echo ''
-        echo 's <bookmark_name> - Saves the current directory as "bookmark_name"'
-        echo 'g <bookmark_name> - Goes (cd) to the directory associated with "bookmark_name"'
-        echo 'p <bookmark_name> - Prints the directory associated with "bookmark_name"'
-        echo 'd <bookmark_name> - Deletes the bookmark'
-        echo 'l                 - Lists all available bookmarks'
+        echo 'bashmarks_save <bookmark_name> - Saves the current directory as "bookmark_name"'
+        echo 'bashmarks_jump <bookmark_name> - Goes (cd) to the directory associated with "bookmark_name"'
+        echo 'bashmarks_print <bookmark_name> - Prints the directory associated with "bookmark_name"'
+        echo 'bashmarks_delete <bookmark_name> - Deletes the bookmark'
+        echo 'bashmarks_list                 - Lists all available bookmarks'
         kill -SIGINT $$
     fi
 }
 
 # list bookmarks with dirnam
-function l {
+function bashmarks_list {
     check_help $1
     source $SDIRS
         
@@ -108,7 +108,7 @@ function l {
     # env | grep "^DIR_" | cut -c5- | sort |grep "^.*=" 
 }
 # list bookmarks without dirname
-function _l {
+function bashmarks_list_short {
     source $SDIRS
     env | grep "^DIR_" | cut -c5- | sort | grep "^.*=" | cut -f1 -d "=" 
 }
@@ -130,13 +130,13 @@ function _comp {
     local curw
     COMPREPLY=()
     curw=${COMP_WORDS[COMP_CWORD]}
-    COMPREPLY=($(compgen -W '`_l`' -- $curw))
+    COMPREPLY=($(compgen -W '`bashmarks_list_short`' -- $curw))
     return 0
 }
 
 # ZSH completion command
 function _compzsh {
-    reply=($(_l))
+    reply=($(bashmarks_list_short))
 }
 
 # safe delete line from sdirs
@@ -156,14 +156,20 @@ function _purge_line {
     fi
 }
 
-# bind completion command for g,p,d to _comp
+# bind completion command for bashmarks_jump,bashmarks_print,bashmarks_delete to _comp
 if [ $ZSH_VERSION ]; then
-    compctl -K _compzsh g
-    compctl -K _compzsh p
-    compctl -K _compzsh d
+    compctl -K _compzsh bashmarks_jump
+    compctl -K _compzsh bashmarks_print
+    compctl -K _compzsh bashmarks_delete
 else
     shopt -s progcomp
-    complete -F _comp g
-    complete -F _comp p
-    complete -F _comp d
+    complete -F _comp bashmarks_jump
+    complete -F _comp bashmarks_print
+    complete -F _comp bashmarks_delete
 fi
+
+alias bs='bashmarks_save'
+alias bj='bashmarks_jump'
+alias bd='bashmarks_delete'
+alias bp='bashmarks_print'
+alias bl='bashmarks_list'
