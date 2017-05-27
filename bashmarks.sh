@@ -56,13 +56,13 @@ ask () {
 }
 
 _show_error_message() {
-	if [[ ! -z "${1}" ]]; then
-		if ((COLOR_ENABLED == 1)); then
-			echo -e "${BRED}${1}${COLOR_OFF}"	
-		else
-			echo "${1}"
-		fi
-	fi
+    if [[ ! -z "${1}" ]]; then
+        if ((COLOR_ENABLED == 1)); then
+            echo -e "${BRED}${1}${COLOR_OFF}"   
+        else
+            echo "${1}"
+        fi
+    fi
 }
 
 # Remove all bookmarks.
@@ -76,7 +76,7 @@ bmra() {
 add_bookmark() {
     if [[ -z "${1}" ]]; then
         bookmarks_help
-		return 1
+        return 1
     else
         printf "%s=%s\n" "$1" "$PWD" >> "${BM_FILE}"
     fi
@@ -87,8 +87,8 @@ ls_bookmarks() {
     if [[ -f "${BM_FILE}" ]]; then
         awk -F '=' '{print $1}' "${BM_FILE}"
     else
-		_show_error_message "Bookmarks file does not exist ... "
-		return 1
+        _show_error_message "Bookmarks file does not exist ... "
+        return 1
     fi
 }
 
@@ -96,14 +96,14 @@ ls_bookmarks() {
 bmg() {
     if [[ ! -z "${1}" ]]; then
         local TARGET=$(grep --extended-regexp "^$1" "${BM_FILE}" | awk -F '=' '{print $2}')
-		if [[ -z "${TARGET}" ]]; then
-			_show_error_message "Bookmark '${1}' not found ... "
-			return 1
-		fi
+        if [[ -z "${TARGET}" ]]; then
+            _show_error_message "Bookmark '${1}' not found ... "
+            return 1
+        fi
         cd "${TARGET}"
     else
-		_show_error_message "Bookmark empty ... "
-		return 1
+        _show_error_message "Bookmark empty ... "
+        return 1
     fi
 }
 
@@ -124,8 +124,8 @@ bmp() {
             printf "%s -> %s\n" "${BOOKMARK}" "${BM_PATH}"
         fi
     else
-		_show_error_message "Bookmark '${BOOKMARK}' does not exist."
-		return 1
+        _show_error_message "Bookmark '${BOOKMARK}' does not exist."
+        return 1
     fi
 }
 
@@ -135,8 +135,8 @@ bmd() {
     if grep --extended-regexp --quiet "^${BOOKMARK}.*" "${BM_FILE}"; then
         sed --in-place "/^${BOOKMARK}/d" "${BM_FILE}"
     else
-		_show_error_message "Bookmark '${BOOKMARK}' does not exist."
-		return 1
+        _show_error_message "Bookmark '${BOOKMARK}' does not exist."
+        return 1
     fi
 }
 
@@ -146,19 +146,19 @@ bmsv() {
         if is_valid "${1}"; then
             add_bookmark "${1}"
         else
-			_show_error_message "'${1}' is not valid."
-			return 1
+            _show_error_message "'${1}' is not valid."
+            return 1
         fi
     else
         bookmarks_help
-		return 1
+        return 1
     fi
 }
 
 # Print bookmarks using select
 bmpi() {
     local -r BOOKMARK_OPT_TXT="${PS3}"
-	local _OPTION
+    local _OPTION
     PS3="Bookmark number: "
     select _OPTION in $(ls_bookmarks); do
         bmp "${_OPTION}"
@@ -172,14 +172,14 @@ bml() {
     if [[ -f "${BM_FILE}" ]]; then
         awk -F '=' '{print $1}' "${BM_FILE}"
     else
-		_show_error_message "Bookmarks file does not exist, please check your installation ... "
-		return 1
+        _show_error_message "Bookmarks file does not exist, please check your installation ... "
+        return 1
     fi
 }
 
 # Shows help ... 
 bmh() {
-	bookmarks_help
+    bookmarks_help
 }
 
 # completion command
