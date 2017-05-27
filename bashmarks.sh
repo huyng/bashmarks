@@ -1,4 +1,3 @@
-#!/bin/bash
 # Copyright (c) 2010, Huy Nguyen, http://www.huyng.com
 # All rights reserved.
 # 
@@ -21,7 +20,7 @@
 # HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING 
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
 
-BM_FILE=${HOME}/.bm.txt
+BM_FILE="${HOME}/.bm.txt"
 COLOR_ENABLED=1
 COLOR_OFF='\e[0m'       # Text Reset
 BGREEN='\e[1;32m'       # Green
@@ -41,31 +40,43 @@ bmd bookmarkname - deletes the bookmark
 bmd [TAB] - tab completion is available
 bmra - Remove all bookmarks
 bml - list all bookmarks
+bmh - shows this help
 
 BOOKMARKS_HELP
 }
 
-# Checks if a bookmark identifies is valid.
+# Checks if a bookmark identifier is valid.
 is_valid() {
-    [[ "$1" =~ ^[a-zA-Z0-9_]+$ ]] && return 0 || return 1
+    [[ "${1}" =~ ^[a-zA-Z0-9_]+$ ]] && return 0 || return 1
 }
 
 ask () { 
-    read -p "$@ [y/n] " ans
-    echo "$ans" | grep -qi "^y$" && return 0 || return 1
+    read -p "${@} [y/n] " ans
+    echo "${ans}" | grep --quiet --ignore-case "^y$"
+}
+
+_show_error_message() {
+	if [[ ! -z "${1}" ]]; then
+		if ((COLOR_ENABLED == 1)); then
+			echo -e "${BRED}${1}${COLOR_OFF}"	
+		else
+			echo "${1}"
+		fi
+	fi
 }
 
 # Remove all bookmarks.
 bmra() {
     if ask "Remove all bookmarks"; then
-        sed -n -i '1,$d' "${BM_FILE}"
+        sed --quiet --in-place '1,$d' "${BM_FILE}"
     fi
 }
 
 # Add bookmark
 add_bookmark() {
-    if [ -z "$1" ]; then
+    if [[ -z "${1}" ]]; then
         bookmarks_help
+		return 1
     else
         printf "%s=%s\n" "$1" "$PWD" >> "${BM_FILE}"
     fi
@@ -73,43 +84,43 @@ add_bookmark() {
 
 # List bookmark
 ls_bookmarks() {
-    [ -f "${BM_FILE}" ] && {
+    if [[ -f "${BM_FILE}" ]]; then
         awk -F '=' '{print $1}' "${BM_FILE}"
-    } || {
-        echo -e "Bookmarks file does not exist."
-        [ $COLOR_ENABLED -eq 1 ] && {
+    else
+        echo "Bookmarks file does not exist."
+        if ((COLOR_ENABLED == 1)); then
             echo -e "${BRED}Bookmarks file does not exist.${COLOR_OFF}"
-        } || {
-            echo -e "Bookmarks file does not exist."
-        }
-    }
+        else
+            echo "Bookmarks file does not exist."
+        fi
+    fi
 }
 
 # Go to bookmark
 bmg() {
-    if [ ! -z "$1" ]; then
-        local TARGET=`grep -E "^$1" "${BM_FILE}" | awk -F '=' '{print $2}'`
+    if [[ ! -z "${1}" ]]; then
+        local TARGET=$(grep --extended-regexp "^$1" "${BM_FILE}" | awk -F '=' '{print $2}')
+		if [[ -z "${TARGET}" ]]; then
+			_show_error_message "Bookmark not found ... "
+			return 1
+		fi
         cd "${TARGET}"
     else
-        [ $COLOR_ENABLED -eq 1 ] && {
-            echo -e "${BRED}Bookmark NOT found.${COLOR_OFF}"
-        } || {
-            echo -e "Bookmark NOT found."
-        }
+		_show_error_message "Bookmark empty ... "
     fi
 }
 
 # Print bookmark
 bmp() {
 
-    [ -z "$1" ] && {
+    if [[ -z "$1" ]]; then
         bookmarks_help
         return 1
-    }
+    fi
 
-    local BOOKMARK="$1"
+    local BOOKMARK="${1}"
     grep -Eq "^${BOOKMARK}.*" "${BM_FILE}" && {
-        local BM_PATH=`grep -E "^${BOOKMARK}.*" "${BM_FILE}" | awk -F '=' '{print $2}'`
+        local BM_PATH=$(grep -E "^${BOOKMARK}.*" "${BM_FILE}" | awk -F '=' '{print $2}')
         if [ $COLOR_ENABLED -eq 1 ]; then
             printf "${BGREEN}%s ${COLOR_OFF} -> %s\n" "${BOOKMARK}" "${BM_PATH}"
         else
@@ -175,8 +186,12 @@ bml() {
     }   
 }
 
+bmh() {
+	bookmarks_help
+}
+
 # completion command
-_comp {
+_comp() {
     COMPREPLY=()
     local curw=${COMP_WORDS[COMP_CWORD]}
     COMPREPLY=($(compgen -W '`ls_bookmarks`' -- $curw))
