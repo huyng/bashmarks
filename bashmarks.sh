@@ -87,12 +87,8 @@ ls_bookmarks() {
     if [[ -f "${BM_FILE}" ]]; then
         awk -F '=' '{print $1}' "${BM_FILE}"
     else
-        echo "Bookmarks file does not exist."
-        if ((COLOR_ENABLED == 1)); then
-            echo -e "${BRED}Bookmarks file does not exist.${COLOR_OFF}"
-        else
-            echo "Bookmarks file does not exist."
-        fi
+		_show_error_message "Bookmarks file does not exist ... "
+		return 1
     fi
 }
 
@@ -101,12 +97,13 @@ bmg() {
     if [[ ! -z "${1}" ]]; then
         local TARGET=$(grep --extended-regexp "^$1" "${BM_FILE}" | awk -F '=' '{print $2}')
 		if [[ -z "${TARGET}" ]]; then
-			_show_error_message "Bookmark not found ... "
+			_show_error_message "Bookmark '${1}' not found ... "
 			return 1
 		fi
         cd "${TARGET}"
     else
 		_show_error_message "Bookmark empty ... "
+		return 1
     fi
 }
 
@@ -136,7 +133,7 @@ bmp() {
 bmd() {
     local BOOKMARK="$1"
     if grep --extended-regexp --quiet "^${BOOKMARK}.*" "${BM_FILE}"; then
-        sed -i "/^${BOOKMARK}/d" "${BM_FILE}"
+        sed --in-place "/^${BOOKMARK}/d" "${BM_FILE}"
     else
 		_show_error_message "Bookmark '${BOOKMARK}' does not exist."
 		return 1
@@ -160,7 +157,7 @@ bmsv() {
 
 # Print bookmarks using select
 bmpi() {
-    local BOOKMARK_OPT_TXT="${PS3}"
+    local -r BOOKMARK_OPT_TXT="${PS3}"
 	local _OPTION
     PS3="Bookmark number: "
     select _OPTION in $(ls_bookmarks); do
@@ -172,13 +169,15 @@ bmpi() {
 
 # List bookmarks
 bml() {
-    [ -f "${BM_FILE}" ] && {
+    if [[ -f "${BM_FILE}" ]]; then
         awk -F '=' '{print $1}' "${BM_FILE}"
-    } || {
-        echo -e "Bookmarks file does not exist."
-    }   
+    else
+		_show_error_message "Bookmarks file does not exist, please check your installation ... "
+		return 1
+    fi
 }
 
+# Shows help ... 
 bmh() {
 	bookmarks_help
 }
@@ -186,8 +185,8 @@ bmh() {
 # completion command
 _comp() {
     COMPREPLY=()
-    local curw=${COMP_WORDS[COMP_CWORD]}
-    COMPREPLY=($(compgen -W '`ls_bookmarks`' -- $curw))
+    local -r curw=${COMP_WORDS[COMP_CWORD]}
+    COMPREPLY=($(compgen -W '$(ls_bookmarks)' -- ${curw}))
     return 0
 }
 

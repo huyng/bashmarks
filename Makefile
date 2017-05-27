@@ -8,7 +8,7 @@ install:
 	mkdir -vp $(INSTALL_DIR)
 	cp -v bashmarks.sh $(INSTALL_DIR)
 	@echo "bashmarks.sh installed ... "
-	@echo "Please add 'source $(INSTALL_DIR)/bashmarks.sh' to your .bashrc file"
+	@echo "Please add 'source $(INSTALL_DIR)/bashmarks.sh' to your ~/.bashrc file"
 	@echo "bashmarks.sh installed ... "
 	
 help:
@@ -25,6 +25,7 @@ help:
 	@echo 'bmd [TAB] - tab completion is available'
 	@echo 'bmra - Remove all bookmarks'
 	@echo 'bml - list all bookmarks'
+	@echo 'bmh - shows this help'
 	@echo
 
 .PHONY: all install

@@ -20,6 +20,7 @@
 	bmd [TAB] - tab completion is available
 	bmra - Remove all bookmarks
 	bml - list all bookmarks
+	bmh - shows this help
     
 ## Example Usage
 
