@@ -47,7 +47,7 @@ BOOKMARKS_HELP
 
 # Checks if a bookmark identifier is valid.
 is_valid() {
-    [[ "${1}" =~ ^[a-zA-Z0-9_]+$ ]] && return 0 || return 1
+    [[ "${1}" =~ ^[a-zA-Z0-9_]+$ ]]
 }
 
 ask () { 
@@ -119,62 +119,55 @@ bmp() {
     fi
 
     local BOOKMARK="${1}"
-    grep -Eq "^${BOOKMARK}.*" "${BM_FILE}" && {
+    if grep --extended-regexp --quiet "^${BOOKMARK}.*" "${BM_FILE}"; then
         local BM_PATH=$(grep -E "^${BOOKMARK}.*" "${BM_FILE}" | awk -F '=' '{print $2}')
-        if [ $COLOR_ENABLED -eq 1 ]; then
+        if ((COLOR_ENABLED == 1)); then
             printf "${BGREEN}%s ${COLOR_OFF} -> %s\n" "${BOOKMARK}" "${BM_PATH}"
         else
             printf "%s -> %s\n" "${BOOKMARK}" "${BM_PATH}"
         fi
-    } || {
-        [ $COLOR_ENABLED -eq 1 ] && {
-            echo -e "${BRED}Bookmark NOT found.${COLOR_OFF}"
-        } || {
-            echo -e "Bookmark NOT found."
-        }
-    }
+    else
+		_show_error_message "Bookmark '${BOOKMARK}' does not exist."
+		return 1
+    fi
 }
 
 # Delete bookmark
 bmd() {
     local BOOKMARK="$1"
-    grep -Eq "^${BOOKMARK}.*" "${BM_FILE}" && {
+    if grep --extended-regexp --quiet "^${BOOKMARK}.*" "${BM_FILE}"; then
         sed -i "/^${BOOKMARK}/d" "${BM_FILE}"
-    } || {
-        [ $COLOR_ENABLED -eq 1 ] && {
-            echo -e "${BRED}Bookmark NOT found.${COLOR_OFF}"
-        } || {
-            echo -e "Bookmark NOT found."
-        }   
-    }
+    else
+		_show_error_message "Bookmark '${BOOKMARK}' does not exist."
+		return 1
+    fi
 }
 
 # Save bookmark 
 bmsv() {
-    if [ ! -z "$1" ]; then
-        if is_valid "$1"; then
-            add_bookmark "$1"
+    if [[ ! -z "${1}" ]]; then
+        if is_valid "${1}"; then
+            add_bookmark "${1}"
         else
-            [ $COLOR_ENABLED -eq 1 ] && {
-                echo -e "${BRED}Bookmark NOT valid.${COLOR_OFF}"
-            } || {
-                echo -e "Bookmark NOT valid."
-            }
+			_show_error_message "'${1}' is not valid."
+			return 1
         fi
     else
         bookmarks_help
+		return 1
     fi
 }
 
 # Print bookmarks using select
 bmpi() {
-    local BOOKMARK_OPT_TXT=$PS3
+    local BOOKMARK_OPT_TXT="${PS3}"
+	local _OPTION
     PS3="Bookmark number: "
-    select _OPTION in `ls_bookmarks`; do
+    select _OPTION in $(ls_bookmarks); do
         bmp "${_OPTION}"
         break
     done
-    PS3="$BOOKMARK_OPT_TXT"
+    PS3="${BOOKMARK_OPT_TXT}"
 }
 
 # List bookmarks
