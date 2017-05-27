@@ -72,7 +72,7 @@ bmra() {
     fi
 }
 
-# Add bookmark
+    # Add bookmark
 add_bookmark() {
     if [[ -z "${1}" ]]; then
         bookmarks_help
@@ -95,7 +95,7 @@ ls_bookmarks() {
 # Go to bookmark
 bmg() {
     if [[ ! -z "${1}" ]]; then
-        local TARGET=$(grep --extended-regexp "^$1" "${BM_FILE}" | awk -F '=' '{print $2}')
+        local -r TARGET=$(grep --extended-regexp "^$1" "${BM_FILE}" | awk -F '=' '{print $2}')
         if [[ -z "${TARGET}" ]]; then
             _show_error_message "Bookmark '${1}' not found ... "
             return 1
@@ -115,9 +115,9 @@ bmp() {
         return 1
     fi
 
-    local BOOKMARK="${1}"
+    local -r BOOKMARK="${1}"
     if grep --extended-regexp --quiet "^${BOOKMARK}.*" "${BM_FILE}"; then
-        local BM_PATH=$(grep -E "^${BOOKMARK}.*" "${BM_FILE}" | awk -F '=' '{print $2}')
+        local -r BM_PATH=$(grep -E "^${BOOKMARK}.*" "${BM_FILE}" | awk -F '=' '{print $2}')
         if ((COLOR_ENABLED == 1)); then
             printf "${BGREEN}%s ${COLOR_OFF} -> %s\n" "${BOOKMARK}" "${BM_PATH}"
         else
@@ -131,7 +131,7 @@ bmp() {
 
 # Delete bookmark
 bmd() {
-    local BOOKMARK="$1"
+    local -r BOOKMARK="$1"
     if grep --extended-regexp --quiet "^${BOOKMARK}.*" "${BM_FILE}"; then
         sed --in-place "/^${BOOKMARK}/d" "${BM_FILE}"
     else
