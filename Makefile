@@ -7,9 +7,10 @@ install:
 	@echo ""
 	mkdir -p $(INSTALL_DIR)
 	cp bashmarks.sh $(INSTALL_DIR)
+	@echo ""
 	@echo "bashmarks.sh installed ... "
+	@echo ""
 	@echo "Please add 'source $(INSTALL_DIR)/bashmarks.sh' to your ~/.bashrc file"
-	@echo "bashmarks.sh installed ... "
 	
 help:
 

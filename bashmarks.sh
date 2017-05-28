@@ -78,7 +78,7 @@ add_bookmark() {
         bookmarks_help
         return 1
     else
-        printf "%s=%s\n" "$1" "$PWD" >> "${BM_FILE}"
+        printf "%s=%s\n" "${1}" "${PWD}" >> "${BM_FILE}"
     fi
 }
 
@@ -110,7 +110,7 @@ bmg() {
 # Print bookmark
 bmp() {
 
-    if [[ -z "$1" ]]; then
+    if [[ -z "${1}" ]]; then
         bookmarks_help
         return 1
     fi
@@ -131,7 +131,7 @@ bmp() {
 
 # Delete bookmark
 bmd() {
-    local -r BOOKMARK="$1"
+    local -r BOOKMARK="${1}"
     if grep --extended-regexp --quiet "^${BOOKMARK}.*" "${BM_FILE}"; then
         sed --in-place "/^${BOOKMARK}/d" "${BM_FILE}"
     else
