@@ -20,11 +20,11 @@
 # HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING 
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
 
-readonly BM_FILE="${HOME}/.bm.txt"
-readonly COLOR_ENABLED=1
-readonly COLOR_OFF='\e[0m'       # Text Reset
-readonly BGREEN='\e[1;32m'       # Green
-readonly BRED='\e[1;31m'         # Red
+BM_FILE="${HOME}/.bm.txt"
+COLOR_ENABLED=1
+COLOR_OFF='\e[0m'       # Text Reset
+BGREEN='\e[1;32m'       # Green
+BRED='\e[1;31m'         # Red
 
 bookmarks_help() {
 cat <<BOOKMARKS_HELP
@@ -58,9 +58,9 @@ ask () {
 _show_error_message() {
     if [[ ! -z "${1}" ]]; then
         if ((COLOR_ENABLED == 1)); then
-            echo -e "${BRED}${1}${COLOR_OFF}"   
+            echo -e "${BRED}${1}${COLOR_OFF}" 1>&2
         else
-            echo "${1}"
+            echo "${1}" 1>&2
         fi
     fi
 }
@@ -119,7 +119,7 @@ bmp() {
     if grep --extended-regexp --quiet "^${BOOKMARK}.*" "${BM_FILE}"; then
         local -r BM_PATH=$(grep -E "^${BOOKMARK}.*" "${BM_FILE}" | awk -F '=' '{print $2}')
         if ((COLOR_ENABLED == 1)); then
-            printf "${BGREEN}%s ${COLOR_OFF}-> %s\n" "${BOOKMARK}" "${BM_PATH}"
+            printf "${BGREEN}%s ${COLOR_OFF}-> %s\n" "${BOOKMARK}" "${BM_PATH}" 
         else
             printf "%s -> %s\n" "${BOOKMARK}" "${BM_PATH}"
         fi
