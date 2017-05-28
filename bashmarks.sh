@@ -119,7 +119,7 @@ bmp() {
     if grep --extended-regexp --quiet "^${BOOKMARK}.*" "${BM_FILE}"; then
         local -r BM_PATH=$(grep -E "^${BOOKMARK}.*" "${BM_FILE}" | awk -F '=' '{print $2}')
         if ((COLOR_ENABLED == 1)); then
-            printf "${BGREEN}%s ${COLOR_OFF} -> %s\n" "${BOOKMARK}" "${BM_PATH}"
+            printf "${BGREEN}%s ${COLOR_OFF}-> %s\n" "${BOOKMARK}" "${BM_PATH}"
         else
             printf "%s -> %s\n" "${BOOKMARK}" "${BM_PATH}"
         fi
