@@ -5,8 +5,8 @@ all:
 
 install:
 	@echo ""
-	mkdir -vp $(INSTALL_DIR)
-	cp -v bashmarks.sh $(INSTALL_DIR)
+	mkdir -p $(INSTALL_DIR)
+	cp bashmarks.sh $(INSTALL_DIR)
 	@echo "bashmarks.sh installed ... "
 	@echo "Please add 'source $(INSTALL_DIR)/bashmarks.sh' to your ~/.bashrc file"
 	@echo "bashmarks.sh installed ... "

@@ -20,11 +20,11 @@
 # HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING 
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE 
 
-BM_FILE="${HOME}/.bm.txt"
-COLOR_ENABLED=1
-COLOR_OFF='\e[0m'       # Text Reset
-BGREEN='\e[1;32m'       # Green
-BRED='\e[1;31m'         # Red
+readonly BM_FILE="${HOME}/.bm.txt"
+readonly COLOR_ENABLED=1
+readonly COLOR_OFF='\e[0m'       # Text Reset
+readonly BGREEN='\e[1;32m'       # Green
+readonly BRED='\e[1;31m'         # Red
 
 bookmarks_help() {
 cat <<BOOKMARKS_HELP
