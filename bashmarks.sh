@@ -24,8 +24,8 @@
 
 # USAGE: 
 # s bookmarkname - saves the curr dir as bookmarkname
-# g bookmarkname - jumps to the that bookmark
-# g b[TAB] - tab completion is available
+# go bookmarkname - jumps to the that bookmark
+# go b[TAB] - tab completion is available
 # p bookmarkname - prints the bookmark
 # p b[TAB] - tab completion is available
 # d bookmarkname - deletes the bookmark
@@ -53,7 +53,7 @@ function s {
 }
 
 # jump to bookmark
-function g {
+function go {
     check_help $1
     source $SDIRS
     target="$(eval $(echo echo $(echo \$DIR_$1)))"
@@ -158,12 +158,12 @@ function _purge_line {
 
 # bind completion command for g,p,d to _comp
 if [ $ZSH_VERSION ]; then
-    compctl -K _compzsh g
+    compctl -K _compzsh go
     compctl -K _compzsh p
     compctl -K _compzsh d
 else
     shopt -s progcomp
-    complete -F _comp g
+    complete -F _comp go
     complete -F _comp p
     complete -F _comp d
 fi
