@@ -42,7 +42,7 @@ RED="0;31m"
 GREEN="0;33m"
 
 # save current directory to bookmarks
-function sve {
+function sav {
     check_help $1
     _bookmark_name_valid "$@"
     if [ -z "$exit_message" ]; then
@@ -87,7 +87,7 @@ function del {
 function check_help {
     if [ "$1" = "-h" ] || [ "$1" = "-help" ] || [ "$1" = "--help" ] ; then
         echo ''
-        echo 'sve <bookmark_name> - Saves the current directory as "bookmark_name"'
+        echo 'sav <bookmark_name> - Saves the current directory as "bookmark_name"'
         echo 'go  <bookmark_name> - Goes (cd) to the directory associated with "bookmark_name"'
         echo 'prt <bookmark_name> - Prints the directory associated with "bookmark_name"'
         echo 'del <bookmark_name> - Deletes the bookmark'
