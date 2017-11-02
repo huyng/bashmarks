@@ -42,7 +42,7 @@ RED="0;31m"
 GREEN="0;33m"
 
 # save current directory to bookmarks
-function s {
+function sve {
     check_help $1
     _bookmark_name_valid "$@"
     if [ -z "$exit_message" ]; then
@@ -67,14 +67,14 @@ function go {
 }
 
 # print bookmark
-function p {
+function prt {
     check_help $1
     source $SDIRS
     echo "$(eval $(echo echo $(echo \$DIR_$1)))"
 }
 
 # delete bookmark
-function d {
+function del {
     check_help $1
     _bookmark_name_valid "$@"
     if [ -z "$exit_message" ]; then
@@ -87,17 +87,17 @@ function d {
 function check_help {
     if [ "$1" = "-h" ] || [ "$1" = "-help" ] || [ "$1" = "--help" ] ; then
         echo ''
-        echo 's <bookmark_name> - Saves the current directory as "bookmark_name"'
-        echo 'g <bookmark_name> - Goes (cd) to the directory associated with "bookmark_name"'
-        echo 'p <bookmark_name> - Prints the directory associated with "bookmark_name"'
-        echo 'd <bookmark_name> - Deletes the bookmark'
-        echo 'l                 - Lists all available bookmarks'
+        echo 'sve <bookmark_name> - Saves the current directory as "bookmark_name"'
+        echo 'go  <bookmark_name> - Goes (cd) to the directory associated with "bookmark_name"'
+        echo 'prt <bookmark_name> - Prints the directory associated with "bookmark_name"'
+        echo 'del <bookmark_name> - Deletes the bookmark'
+        echo 'lst                 - Lists all available bookmarks'
         kill -SIGINT $$
     fi
 }
 
 # list bookmarks with dirnam
-function l {
+function lst {
     check_help $1
     source $SDIRS
         
@@ -159,11 +159,11 @@ function _purge_line {
 # bind completion command for g,p,d to _comp
 if [ $ZSH_VERSION ]; then
     compctl -K _compzsh go
-    compctl -K _compzsh p
-    compctl -K _compzsh d
+    compctl -K _compzsh prt
+    compctl -K _compzsh del
 else
     shopt -s progcomp
     complete -F _comp go
-    complete -F _comp p
-    complete -F _comp d
+    complete -F _comp prt
+    complete -F _comp del
 fi
