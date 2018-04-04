@@ -47,7 +47,7 @@ function s {
     _bookmark_name_valid "$@"
     if [ -z "$exit_message" ]; then
         _purge_line "$SDIRS" "export DIR_$1="
-        CURDIR=$(echo $PWD| sed "s#^$HOME#\$HOME#g")
+        CURDIR="${PWD/$HOME/\$HOME}"
         echo "export DIR_$1=\"$CURDIR\"" >> $SDIRS
     fi
 }
@@ -56,7 +56,7 @@ function s {
 function g {
     check_help $1
     source $SDIRS
-    target="$(eval $(echo echo $(echo \$DIR_$1)))"
+    target="$DIR_$1"
     if [ -d "$target" ]; then
         cd "$target"
     elif [ ! -n "$target" ]; then
@@ -85,15 +85,16 @@ function d {
 
 # print out help for the forgetful
 function check_help {
-    if [ "$1" = "-h" ] || [ "$1" = "-help" ] || [ "$1" = "--help" ] ; then
-        echo ''
-        echo 's <bookmark_name> - Saves the current directory as "bookmark_name"'
-        echo 'g <bookmark_name> - Goes (cd) to the directory associated with "bookmark_name"'
-        echo 'p <bookmark_name> - Prints the directory associated with "bookmark_name"'
-        echo 'd <bookmark_name> - Deletes the bookmark'
-        echo 'l                 - Lists all available bookmarks'
-        kill -SIGINT $$
-    fi
+    case "$1" in
+        -h|-help|--help|-?)
+            echo ''
+            echo 's <bookmark_name> - Saves the current directory as "bookmark_name"'
+            echo 'g <bookmark_name> - Goes (cd) to the directory associated with "bookmark_name"'
+            echo 'p <bookmark_name> - Prints the directory associated with "bookmark_name"'
+            echo 'd <bookmark_name> - Deletes the bookmark'
+            echo 'l                 - Lists all available bookmarks'
+            kill -SIGINT $$ ;;
+    esac
 }
 
 # list bookmarks with dirnam
@@ -110,7 +111,11 @@ function l {
 # list bookmarks without dirname
 function _l {
     source $SDIRS
-    env | grep "^DIR_" | cut -c5- | sort | grep "^.*=" | cut -f1 -d "=" 
+    while IFS="=" read -a X; do
+        if [[ "${X[0]}" == DIR* ]]; then
+                printf "%s\n" "${X[1]%/*}"
+        fi
+    done <<< "$(env)" | sort
 }
 
 # validate bookmark name
@@ -127,9 +132,7 @@ function _bookmark_name_valid {
 
 # completion command
 function _comp {
-    local curw
-    COMPREPLY=()
-    curw=${COMP_WORDS[COMP_CWORD]}
+    local curw=${COMP_WORDS[COMP_CWORD]}
     COMPREPLY=($(compgen -W '`_l`' -- $curw))
     return 0
 }
