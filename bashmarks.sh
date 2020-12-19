@@ -33,7 +33,7 @@
 # l - list all bookmarks
 
 # setup file to store bookmarks
-if [ ! -n "$SDIRS" ]; then
+if [ -z "$SDIRS" ]; then
     SDIRS=~/.sdirs
 fi
 \touch $SDIRS
