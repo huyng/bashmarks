@@ -36,7 +36,7 @@
 if [ ! -n "$SDIRS" ]; then
     SDIRS=~/.sdirs
 fi
-touch $SDIRS
+\touch $SDIRS
 
 RED="0;31m"
 GREEN="0;33m"
@@ -102,15 +102,15 @@ function l {
     source $SDIRS
         
     # if color output is not working for you, comment out the line below '\033[1;32m' == "red"
-    env | sort | awk '/^DIR_.+/{split(substr($0,5),parts,"="); printf("\033[0;33m%-20s\033[0m %s\n", parts[1], parts[2]);}'
+    \env | \sort | \awk '/^DIR_.+/{split(substr($0,5),parts,"="); printf("\033[0;33m%-20s\033[0m %s\n", parts[1], parts[2]);}'
     
     # uncomment this line if color output is not working with the line above
-    # env | grep "^DIR_" | cut -c5- | sort |grep "^.*=" 
+    # \env | \grep "^DIR_" | \cut -c5- | \sort | \grep "^.*=" 
 }
 # list bookmarks without dirname
 function _l {
     source $SDIRS
-    env | grep "^DIR_" | cut -c5- | sort | grep "^.*=" | cut -f1 -d "=" 
+    \env | \grep "^DIR_" | \cut -c5- | \sort | \grep "^.*=" | \cut -f1 -d "=" 
 }
 
 # validate bookmark name
@@ -144,14 +144,14 @@ function _purge_line {
     if [ -s "$1" ]; then
         # safely create a temp file
         t=$(mktemp -t bashmarks.XXXXXX) || exit 1
-        trap "/bin/rm -f -- '$t'" EXIT
+        trap "\rm -f -- '$t'" EXIT
 
         # purge line
         sed "/$2/d" "$1" > "$t"
-        /bin/mv "$t" "$1"
+        \mv "$t" "$1"
 
         # cleanup temp file
-        /bin/rm -f -- "$t"
+        \rm -f -- "$t"
         trap - EXIT
     fi
 }
