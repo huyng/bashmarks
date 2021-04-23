@@ -101,12 +101,20 @@ function l {
     check_help $1
     source $SDIRS
         
-    # if color output is not working for you, comment out the line below '\033[1;32m' == "red"
-    env | sort | awk '/^DIR_.+/{split(substr($0,5),parts,"="); printf("\033[0;33m%-20s\033[0m %s\n", parts[1], parts[2]);}'
+    if [[ -z $1 ]]; then
+        # if color output is not working for you, comment out the line below '\033[1;32m' == "red"
+        env | sort | awk '/^DIR_.+/{split(substr($0,5),parts,"="); printf("\033[0;33m%-20s\033[0m %s\n", parts[1], parts[2]);}'
     
-    # uncomment this line if color output is not working with the line above
-    # env | grep "^DIR_" | cut -c5- | sort |grep "^.*=" 
+        # uncomment this line if color output is not working with the line above
+        # env | grep "^DIR_" | cut -c5- | sort |grep "^.*=" 
+    else
+        # if color output is not working for you, comment out the line below '\033[1;32m' == "red"
+        env | grep "^DIR_${1}" | sort | awk '/^DIR_.+/{split(substr($0,5),parts,"="); printf("\033[0;33m%-20s\033[0m %s\n", parts[1], parts[2]);}'
+        # uncomment this line if color output is not working with the line above
+        # env | grep "^DIR_${1}" | cut -c5- | sort |grep "^.*="
+    fi
 }
+
 # list bookmarks without dirname
 function _l {
     source $SDIRS
@@ -158,11 +166,13 @@ function _purge_line {
 
 # bind completion command for g,p,d to _comp
 if [ $ZSH_VERSION ]; then
+    compctl -K _compzsh l
     compctl -K _compzsh g
     compctl -K _compzsh p
     compctl -K _compzsh d
 else
     shopt -s progcomp
+    complete -F _comp l
     complete -F _comp g
     complete -F _comp p
     complete -F _comp d
