@@ -36,7 +36,7 @@
 if [ ! -n "$SDIRS" ]; then
     SDIRS=~/.sdirs
 fi
-touch $SDIRS
+touch "$SDIRS"
 
 RED="0;31m"
 GREEN="0;33m"
