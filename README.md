@@ -2,29 +2,47 @@
 
 ## Install
 
-1. git clone git://github.com/huyng/bashmarks.git
+1. git clone git://github.com/chunkily/bashmarks.git
 2. cd bashmarks
 3. make install
 4. source **~/.local/bin/bashmarks.sh** from within your **~.bash\_profile** or **~/.bashrc** file
 
 ## Shell Commands
 
-    s <bookmark_name> - Saves the current directory as "bookmark_name"
-    g <bookmark_name> - Goes (cd) to the directory associated with "bookmark_name"
-    p <bookmark_name> - Prints the directory associated with "bookmark_name"
-    d <bookmark_name> - Deletes the bookmark
-    l                 - Lists all available bookmarks
-    
+    mark <bookmark_name>    - Goes (cd) to the directory associated with "bookmark_name"
+    mark -s <bookmark_name> - Saves the current directory as "bookmark_name"
+    mark -p <bookmark_name> - Prints the directory associated with "bookmark_name"
+    mark -d <bookmark_name> - Deletes the bookmark
+    mark -l                 - Lists all available bookmarks
+    mark -h                 - Shows this help
+
 ## Example Usage
 
     $ cd /var/www/
-    $ s webfolder
+    $ mark -s webfolder
     $ cd /usr/local/lib/
-    $ s locallib
-    $ l
-    $ g web<tab>
-    $ g webfolder
+    $ mark -s locallib
+    $ mark -l
+    $ mark web<tab>
+    $ mark webfolder
+
+## Recommended alias shortcut
+
+Use aliases to allow invocation with a single letter command for maximum efficiency.
+
+    $ alias g='mark'
+    $ g locallib
 
 ## Where Bashmarks are stored
     
 All of your directory bookmarks are saved in a file called ".sdirs" in your HOME directory.
+
+## Migrating from original bashmarks
+
+Use aliases to get the original behavior. Put the following in your **~.bash\_profile** or **~/.bashrc** file.
+
+    alias g='mark'
+    alias s='mark -s'
+    alias p='mark -p'
+    alias d='mark -d'
+    alias l='mark -l'

@@ -12,10 +12,10 @@ install:
 	@echo ''
 	@echo 'USAGE:'
 	@echo '------'
-	@echo 's <bookmark_name> - Saves the current directory as "bookmark_name"'
-	@echo 'g <bookmark_name> - Goes (cd) to the directory associated with "bookmark_name"'
-	@echo 'p <bookmark_name> - Prints the directory associated with "bookmark_name"'
-	@echo 'd <bookmark_name> - Deletes the bookmark'
-	@echo 'l                 - Lists all available bookmarks'
+	@echo 'mark <bookmark_name>    - Goes (cd) to the directory associated with "bookmark_name"'
+	@echo 'mark -s <bookmark_name> - Saves the current directory as "bookmark_name"'
+	@echo 'mark -p <bookmark_name> - Prints the directory associated with "bookmark_name"'
+	@echo 'mark -d <bookmark_name> - Deletes the bookmark'
+	@echo 'mark -l                 - Lists all available bookmarks'
 
 .PHONY: all install
