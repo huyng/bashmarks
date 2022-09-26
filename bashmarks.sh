@@ -62,7 +62,7 @@ function s {
 }
 
 # jump to bookmark
-function c {
+function g {
     check_help $1
     source $SDIRS
     target="$(eval $(echo echo $(echo \$DIR_$1)))"
