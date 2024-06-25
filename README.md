@@ -28,3 +28,9 @@
 ## Where Bashmarks are stored
     
 All of your directory bookmarks are saved in a file called ".sdirs" in your HOME directory.
+
+
+## Creators 
+
+* [Huy Nguyen](https://github.com/huyng)
+* [Karthick Gururaj](https://github.com/karthick-gururaj)
