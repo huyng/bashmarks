@@ -7,7 +7,7 @@ directories. Now supports tab completion.
 
 1. `git clone git://github.com/chunkily/bashmarks.git`
 2. `cd bashmarks`
-3. `make install`
+3. `bash install.sh`
 4. source **~/.local/bin/bashmarks.sh** from within your **~.bash_profile** or
    **~/.bashrc** file
 
