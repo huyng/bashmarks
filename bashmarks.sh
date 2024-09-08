@@ -130,7 +130,24 @@ function _comp {
     local curw
     COMPREPLY=()
     curw=${COMP_WORDS[COMP_CWORD]}
-    COMPREPLY=($(compgen -W '`_l`' -- $curw))
+
+    mark=$(echo $curw | sed 's/\/.*$//')
+    target="$(eval $(echo echo $(echo \$DIR_$mark)))"
+    if [[ $curw == *\/* ]] && [ -d "$target" ]; then
+      afterMark=${curw#*"/"}
+      depth=$(echo $afterMark | tr -cd "/" | wc -c)
+      if [ "$depth" -gt "0" ]; then
+        lastDir=$(echo "$afterMark" | cut -d "/" -f -$depth)
+      else
+        lastDir=""
+      fi
+      list=$(find $target/$lastDir -maxdepth 1 -type d| sed "s#$target#$mark#")
+
+      COMPREPLY=($(compgen -W '$list' -- $curw))
+    else
+      COMPREPLY=($(compgen -W '`_l`' -- $curw))
+    fi
+
     return 0
 }
 
@@ -163,7 +180,7 @@ if [ $ZSH_VERSION ]; then
     compctl -K _compzsh d
 else
     shopt -s progcomp
-    complete -F _comp g
+    complete -o nospace -F _comp g
     complete -F _comp p
     complete -F _comp d
 fi
