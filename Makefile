@@ -1,4 +1,7 @@
-INSTALL_DIR=~/.local/bin
+ifndef INSTALL_DIR
+    INSTALL_DIR=~/.local/bin
+    @echo "Setting INSTALL_DIR -> $(INSTALL_DIR)"
+endif
 
 all:
 	@echo "Please run 'make install'"
