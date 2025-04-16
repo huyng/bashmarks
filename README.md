@@ -6,7 +6,7 @@
 2. `cd bashmarks`
 3. `make install`
 4. source **~/.local/bin/bashmarks.sh** from within your **~.bash\_profile** or **~/.bashrc** file
-5. you can now remove the downloaded bashmarks folder: `rm -rf bashmarks`
+5. you can now remove the downloaded `bashmarks` folder which is no longer needed
 
 ## Shell Commands
 
