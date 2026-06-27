@@ -142,7 +142,9 @@ function _compzsh {
 # safe delete line from sdirs
 function _purge_line {
     if [ -s "$1" ]; then
-        sed -i "/$2/d" "$1"
+        t=$(mktemp "${TMPDIR:-/tmp}/bashmarks.XXXXXX")
+        grep -v "$2" "$1" > "$t"
+        mv "$t" "$1"
     fi
 }
 
