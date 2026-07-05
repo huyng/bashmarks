@@ -47,7 +47,7 @@ function s {
     _bookmark_name_valid "$@"
     if [ -z "$exit_message" ]; then
         _purge_line "$SDIRS" "export DIR_$1="
-        CURDIR=$(echo $PWD| sed "s#^$HOME#\$HOME#g")
+	CURDIR=$(echo $PWD | sed "s#^$HOME#\$HOME#g" | sed "s/ /\ /g")
         echo "export DIR_$1=\"$CURDIR\"" >> $SDIRS
     fi
 }
