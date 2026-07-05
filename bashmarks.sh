@@ -40,6 +40,7 @@ touch "$SDIRS"
 
 RED="0;31m"
 GREEN="0;33m"
+PROGRAM_NAME="bashmarks"
 
 # save current directory to bookmarks
 function s {
@@ -117,10 +118,10 @@ function _l {
 function _bookmark_name_valid {
     exit_message=""
     if [ -z $1 ]; then
-        exit_message="bookmark name required"
+        exit_message="${PROGRAM_NAME}: bookmark name required"
         echo $exit_message
     elif [ "$1" != "$(echo $1 | sed 's/[^A-Za-z0-9_]//g')" ]; then
-        exit_message="bookmark name is not valid"
+        exit_message="${PROGRAM_NAME}: bookmark name is not valid"
         echo $exit_message
     fi
 }
