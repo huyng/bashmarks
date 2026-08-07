@@ -66,6 +66,20 @@ function g {
     fi
 }
 
+# open bookmark in mac
+function o {
+    check_help $1
+    source $SDIRS
+    target="$(eval $(echo echo $(echo \$DIR_$1)))"
+    if [ -d "$target" ]; then
+        open "$target"
+    elif [ ! -n "$target" ]; then
+        echo -e "\033[${RED}WARNING: '${1}' bashmark does not exist\033[00m"
+    else
+        echo -e "\033[${RED}WARNING: '${target}' does not exist\033[00m"
+    fi
+}
+
 # print bookmark
 function p {
     check_help $1
@@ -89,6 +103,7 @@ function check_help {
         echo ''
         echo 's <bookmark_name> - Saves the current directory as "bookmark_name"'
         echo 'g <bookmark_name> - Goes (cd) to the directory associated with "bookmark_name"'
+        echo 'o <bookmark_name> - Opens the directory associated with "bookmark_name" in Finder (MacOsX only)'
         echo 'p <bookmark_name> - Prints the directory associated with "bookmark_name"'
         echo 'd <bookmark_name> - Deletes the bookmark'
         echo 'l                 - Lists all available bookmarks'
