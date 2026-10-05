@@ -48,7 +48,16 @@ function s {
     if [ -z "$exit_message" ]; then
         _purge_line "$SDIRS" "export DIR_$1="
         CURDIR=$(echo $PWD| sed "s#^$HOME#\$HOME#g")
-        echo "export DIR_$1=\"$CURDIR\"" >> $SDIRS
+	if [ -z "$2" ]; then
+          echo "export DIR_$1=\"$CURDIR\"" >> $SDIRS
+	else
+	  if [ -f "$2" ]; then
+       	    CURDIR="${CURDIR}/$2"
+            echo "export DIR_$1=\"$CURDIR\"" >> $SDIRS
+	  else
+	    echo "File doesn't exist"
+	  fi
+	fi
     fi
 }
 
@@ -59,6 +68,8 @@ function g {
     target="$(eval $(echo echo $(echo \$DIR_$1)))"
     if [ -d "$target" ]; then
         cd "$target"
+    elif [ -f "$target" ]; then
+        vim "$target"
     elif [ ! -n "$target" ]; then
         echo -e "\033[${RED}WARNING: '${1}' bashmark does not exist\033[00m"
     else
@@ -85,11 +96,12 @@ function d {
 
 # print out help for the forgetful
 function check_help {
-    if [ "$1" = "-h" ] || [ "$1" = "-help" ] || [ "$1" = "--help" ] ; then
+    if [ "$1" = "-h" ] || [ "$1" = "-help" ] || [ "$1" = "--help" ] || [ -z "$1" ]; then
+	echo 'Remember to add "source ~/.local/bin/bashmarks.sh" to your .bashrc file'
         echo ''
-        echo 's <bookmark_name> - Saves the current directory as "bookmark_name"'
-        echo 'g <bookmark_name> - Goes (cd) to the directory associated with "bookmark_name"'
-        echo 'p <bookmark_name> - Prints the directory associated with "bookmark_name"'
+        echo 's <bookmark_name> - Saves the current directory or file as "bookmark_name"'
+        echo 'g <bookmark_name> - Goes (cd) to the directory or open the file associated with "bookmark_name"'
+        echo 'p <bookmark_name> - Prints the directory or file associated with "bookmark_name"'
         echo 'd <bookmark_name> - Deletes the bookmark'
         echo 'l                 - Lists all available bookmarks'
         kill -SIGINT $$
